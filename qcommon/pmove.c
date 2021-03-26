@@ -51,7 +51,7 @@ pml_t		pml;
 
 // movement parameters
 float	pm_stopspeed = 100;
-float	pm_maxspeed = 3000;
+float	pm_maxspeed = 5000; // CAN WE SET THIS ELSEWHERE?
 float	pm_duckspeed = 100;
 float	pm_accelerate = 10;
 float	pm_airaccelerate = 0;
@@ -581,8 +581,8 @@ void PM_AirMove (void)
 	float		wishspeed;
 	float		maxspeed;
 
-	fmove = pm->cmd.forwardmove*4;
-	smove = pm->cmd.sidemove*4;
+	fmove = pm->cmd.forwardmove;
+	smove = pm->cmd.sidemove;
 	
 //!!!!! pitch should be 1/3 so this isn't needed??!
 #if 0

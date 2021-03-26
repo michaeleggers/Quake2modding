@@ -253,6 +253,7 @@ void CL_PredictMovement (void)
 		cmd = &cl.cmds[frame];
 
 		pm.cmd = *cmd;
+
 		Pmove (&pm);
 
 		// save for debug checking

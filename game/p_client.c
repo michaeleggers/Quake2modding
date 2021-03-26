@@ -1629,6 +1629,11 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		pm.trace = PM_trace;	// adds default parms
 		pm.pointcontents = gi.pointcontents;
 
+		if (ent->has_coffee) {
+			pm.cmd.forwardmove *= 2;
+			pm.cmd.sidemove    *= 2;
+		}
+
 		// perform a pmove
 		gi.Pmove (&pm);
 

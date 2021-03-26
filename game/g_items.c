@@ -587,12 +587,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 
 qboolean Pickup_Vaccine (edict_t *ent, edict_t *other)
 {
-	if (!(ent->style & HEALTH_IGNORE_MAX))
-		if (other->health >= other->max_health)
-			return false;
-
-	//other->health += ent->count;
-
+	other->has_coffee = true;
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 	{

@@ -25,6 +25,7 @@ int			numgltextures;
 int			base_textureid;		// gltextures[i] = base_textureid+i
 
 static byte			 intensitytable[256];
+static byte			 intensitytableFullRange[256];
 static unsigned char gammatable[256];
 
 cvar_t		*intensity;
@@ -32,7 +33,7 @@ cvar_t		*intensity;
 unsigned	d_8to24table[256];
 
 qboolean GL_Upload8 (byte *data, int width, int height,  qboolean mipmap, qboolean is_sky );
-qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap);
+qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap, qboolean lightscale);
 
 
 int		gl_solid_format = 3;
@@ -898,6 +899,49 @@ void GL_LightScaleTexture (unsigned *in, int inwidth, int inheight, qboolean onl
 
 /*
 ================
+GL_LightScaleTextureTGA NOTE(Pythno): For 'full range' TGA textures
+
+Scale up the pixel values in a texture to increase the
+lighting range
+================
+*/
+void GL_LightScaleTextureTGA (unsigned *in, int inwidth, int inheight, qboolean only_gamma )
+{
+	if ( only_gamma )
+	{
+		int		i, c;
+		byte	*p;
+
+		p = (byte *)in;
+
+		c = inwidth*inheight;
+		for (i=0 ; i<c ; i++, p+=4)
+		{
+			p[0] = gammatable[p[0]];
+			p[1] = gammatable[p[1]];
+			p[2] = gammatable[p[2]];
+		}
+	}
+	else
+	{
+		int		i, c;
+		byte	*p;
+
+		p = (byte *)in;
+
+		c = inwidth*inheight; 
+		for (i=0 ; i<c ; i++, p+=4)
+		{
+			p[0] = gammatable[intensitytableFullRange[p[0]]];
+			p[1] = gammatable[intensitytableFullRange[p[1]]];
+			p[2] = gammatable[intensitytableFullRange[p[2]]];
+		}
+	}
+}
+
+
+/*
+================
 GL_MipMap
 
 Operates in place, quartering the size of the texture
@@ -953,7 +997,7 @@ void GL_BuildPalettedTexture( unsigned char *paletted_texture, unsigned char *sc
 int		upload_width, upload_height;
 qboolean uploaded_paletted;
 
-qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap)
+qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap, qboolean lightscale)
 {
 	int			samples;
 	unsigned	scaled[256*256];
@@ -1064,7 +1108,10 @@ qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap)
 	else
 		GL_ResampleTexture (data, width, height, scaled, scaled_width, scaled_height);
 
-	GL_LightScaleTexture (scaled, scaled_width, scaled_height, !mipmap );
+	if (lightscale)
+		GL_LightScaleTexture (scaled, scaled_width, scaled_height, !mipmap );
+	else
+		GL_LightScaleTextureTGA (scaled, scaled_width, scaled_height, !mipmap );
 
 	if ( qglColorTableEXT && gl_ext_palettedtexture->value && ( samples == gl_solid_format ) )
 	{
@@ -1218,7 +1265,7 @@ qboolean GL_Upload8 (byte *data, int width, int height,  qboolean mipmap, qboole
 			}
 		}
 
-		return GL_Upload32 (trans, width, height, mipmap);
+		return GL_Upload32 (trans, width, height, mipmap, true);
 	}
 }
 
@@ -1230,7 +1277,7 @@ GL_LoadPic
 This is also used as an entry point for the generated r_notexture
 ================
 */
-image_t *GL_LoadPic (char *name, byte *pic, int width, int height, imagetype_t type, int bits)
+image_t *GL_LoadPic (char *name, byte *pic, int width, int height, imagetype_t type, int bits, qboolean lightscale)
 {
 	image_t		*image;
 	int			i;
@@ -1295,8 +1342,9 @@ nonscrap:
 		GL_Bind(image->texnum);
 		if (bits == 8)
 			image->has_alpha = GL_Upload8 (pic, width, height, (image->type != it_pic && image->type != it_sky), image->type == it_sky );
-		else
-			image->has_alpha = GL_Upload32 ((unsigned *)pic, width, height, (image->type != it_pic && image->type != it_sky) );
+		else {
+			image->has_alpha = GL_Upload32 ((unsigned *)pic, width, height, (image->type != it_pic && image->type != it_sky), lightscale );
+		}
 		image->upload_width = upload_width;		// after power of 2 and scales
 		image->upload_height = upload_height;
 		image->paletted = uploaded_paletted;
@@ -1308,7 +1356,6 @@ nonscrap:
 
 	return image;
 }
-
 
 /*
 ================
@@ -1332,7 +1379,7 @@ image_t *GL_LoadWal (char *name)
 	height = LittleLong (mt->height);
 	ofs = LittleLong (mt->offsets[0]);
 
-	image = GL_LoadPic (name, (byte *)mt + ofs, width, height, it_wall, 8);
+	image = GL_LoadPic (name, (byte *)mt + ofs, width, height, it_wall, 8, true);
 
 	ri.FS_FreeFile ((void *)mt);
 
@@ -1379,7 +1426,7 @@ image_t	*GL_FindImage (char *name, imagetype_t type)
 		LoadPCX (name, &pic, &palette, &width, &height);
 		if (!pic)
 			return NULL; // ri.Sys_Error (ERR_DROP, "GL_FindImage: can't load %s", name);
-		image = GL_LoadPic (name, pic, width, height, type, 8);
+		image = GL_LoadPic (name, pic, width, height, type, 8, true);
 	}
 	else if (!strcmp(name+len-4, ".wal"))
 	{
@@ -1390,7 +1437,7 @@ image_t	*GL_FindImage (char *name, imagetype_t type)
 		LoadTGA (name, &pic, &width, &height);
 		if (!pic)
 			return NULL; // ri.Sys_Error (ERR_DROP, "GL_FindImage: can't load %s", name);
-		image = GL_LoadPic (name, pic, width, height, type, 32);
+		image = GL_LoadPic (name, pic, width, height, type, 32, false);
 	}
 	else
 		return NULL;	//	ri.Sys_Error (ERR_DROP, "GL_FindImage: bad extension on: %s", name);
@@ -1505,7 +1552,7 @@ void	GL_InitImages (void)
 	if ( intensity->value <= 1 )
 		ri.Cvar_Set( "intensity", "1" );
 
-	gl_state.inverse_intensity = 1 / intensity->value;
+	gl_state.inverse_intensity = 1 / intensity->value; // NOTE(Pythno): This is actually only used for self-illuminated surfaces (like lava)
 
 	Draw_GetPalette ();
 
@@ -1546,6 +1593,14 @@ void	GL_InitImages (void)
 		if (j > 255)
 			j = 255;
 		intensitytable[i] = j;
+	}
+
+	for (i=0 ; i<256 ; i++)
+	{
+		j = i*1;
+		if (j > 255)
+			j = 255;
+		intensitytableFullRange[i] = j;
 	}
 }
 
