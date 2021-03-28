@@ -1109,5 +1109,7 @@ struct edict_s
 	// common data blocks
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
+
+	qboolean      has_coffee;
 };
 

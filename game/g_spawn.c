@@ -31,7 +31,7 @@ void SP_item_health (edict_t *self);
 void SP_item_health_small (edict_t *self);
 void SP_item_health_large (edict_t *self);
 void SP_item_health_mega (edict_t *self);
-void SP_item_vaccine (edict_t *self);
+void SP_item_coffee (edict_t *self);
 
 void SP_info_player_start (edict_t *ent);
 void SP_info_player_deathmatch (edict_t *ent);
@@ -145,13 +145,16 @@ void SP_turret_breach (edict_t *self);
 void SP_turret_base (edict_t *self);
 void SP_turret_driver (edict_t *self);
 
-
+// NOTE(Pythno): Classname -> Spawnfunction:
+// When loading the level (the .bsp file), the engine takes the "classname" of an entity given in the bsp file
+// and searches this list for a matching name. When there is a match the engine can call the given spawn-function (SP_*)
+// which initializes the entity.
 spawn_t	spawns[] = {
 	{"item_health", SP_item_health},
 	{"item_health_small", SP_item_health_small},
 	{"item_health_large", SP_item_health_large},
 	{"item_health_mega", SP_item_health_mega},
-	{"item_vaccine", SP_item_vaccine},
+	{"item_coffee", SP_item_coffee},
 
 	{"info_player_start", SP_info_player_start},
 	{"info_player_deathmatch", SP_info_player_deathmatch},

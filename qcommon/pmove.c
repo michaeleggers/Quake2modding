@@ -581,8 +581,8 @@ void PM_AirMove (void)
 	float		wishspeed;
 	float		maxspeed;
 
-	fmove = pm->cmd.forwardmove*4;
-	smove = pm->cmd.sidemove*4;
+	fmove = pm->cmd.forwardmove;
+	smove = pm->cmd.sidemove;
 	
 //!!!!! pitch should be 1/3 so this isn't needed??!
 #if 0

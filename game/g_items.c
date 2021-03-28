@@ -585,20 +585,10 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	return true;
 }
 
-qboolean Pickup_Vaccine (edict_t *ent, edict_t *other)
+// NOTE(Pythno): Our own function. It will be called whenever the player touches the coffee-item.
+qboolean Pickup_Coffee (edict_t *ent, edict_t *other)
 {
-	if (!(ent->style & HEALTH_IGNORE_MAX))
-		if (other->health >= other->max_health)
-			return false;
-
-	//other->health += ent->count;
-
-
-	if (!(ent->style & HEALTH_IGNORE_MAX))
-	{
-		if (other->health > other->max_health)
-			other->health = other->max_health;
-	}
+	other->has_coffee = true;
 
 	if (ent->style & HEALTH_TIMED)
 	{
@@ -1164,6 +1154,9 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 
 //======================================================================
 
+// NOTE(Pythno): The item definition. A g_item holds data defining the behavior of this item.
+// For example the functionality to be performed when the player touches the item is
+// described through a function pointer called 'Pickup_*'.
 gitem_t	itemlist[] = 
 {
 	{
@@ -2145,7 +2138,7 @@ tank commander's head
 	},
 	{
 		NULL,
-		Pickup_Vaccine,
+		Pickup_Coffee,
 		NULL,
 		NULL,
 		NULL,
@@ -2153,7 +2146,7 @@ tank commander's head
 		NULL, 0,
 		NULL,
 		/* icon */		"i_health",
-		/* pickup */	"Vaccine",
+		/* pickup */	"Coffee",
 		/* width */		3,
 		0,
 		NULL,
@@ -2218,7 +2211,8 @@ void SP_item_health_large (edict_t *self)
 	gi.soundindex ("items/l_health.wav");
 }
 
-void SP_item_vaccine (edict_t *self)
+// NOTE(Pythno): Spawn function. Is called on level startup.
+void SP_item_coffee (edict_t *self)
 {
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
 	{
@@ -2227,8 +2221,7 @@ void SP_item_vaccine (edict_t *self)
 	}
 
 	self->model = "models/items/pythno/vaccine/tris.md2";
-	self->count = 25;
-	SpawnItem (self, FindItem ("Vaccine"));
+	SpawnItem (self, FindItem ("Coffee"));
 	gi.soundindex ("items/l_health.wav");
 }
 
