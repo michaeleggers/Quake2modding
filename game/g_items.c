@@ -2220,7 +2220,7 @@ void SP_item_coffee (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/pythno/vaccine/tris.md2";
+	self->model = "models/items/pythno/coffee/tris.md2";
 	SpawnItem (self, FindItem ("Coffee"));
 	gi.soundindex ("items/l_health.wav");
 }
