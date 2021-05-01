@@ -437,6 +437,8 @@ void Mod_LoadEdges (lump_t *l)
 /*
 =================
 Mod_LoadTexinfo
+
+NOTE(Pythno): Modified to load TGA textures as well, if not .WAL file available.
 =================
 */
 void Mod_LoadTexinfo (lump_t *l)

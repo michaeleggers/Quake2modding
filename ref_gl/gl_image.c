@@ -860,6 +860,15 @@ GL_LightScaleTexture
 
 Scale up the pixel values in a texture to increase the
 lighting range
+
+
+NOTE(Pythno): The light-scaling applied to textures not using the Quake 2 Palette 
+will most likely appear too bright because of the intensitytable.
+
+only_gamma: if mip-mapping is enabled for the upload of 32bit textures,
+this is set to 0. I don't know why. It seems like the correction is only applied
+to the console window and other ui stuff.
+
 ================
 */
 void GL_LightScaleTexture (unsigned *in, int inwidth, int inheight, qboolean only_gamma )
@@ -1490,6 +1499,10 @@ int Draw_GetPalette (void)
 /*
 ===============
 GL_InitImages
+
+NOTE(Pythno): Set gamma- and intensitytables. 
+gl_state.inverse_intensity is only used for lava, water and all surfaces with a warping texture applied.
+Also, surfaces with a transluscency applied will make use of the inverse_intensity. (See: gl_surf.c: void R_DrawAlphaSurfaces (void))
 ===============
 */
 void	GL_InitImages (void)
@@ -1505,7 +1518,7 @@ void	GL_InitImages (void)
 	if ( intensity->value <= 1 )
 		ri.Cvar_Set( "intensity", "1" );
 
-	gl_state.inverse_intensity = 1 / intensity->value;
+	gl_state.inverse_intensity = 1; // / intensity->value;
 
 	Draw_GetPalette ();
 
@@ -1540,6 +1553,7 @@ void	GL_InitImages (void)
 		}
 	}
 
+	// NOTE(Pythno): Seems like every intensity > 128 will be clamped to 255 (since intensity->value is set to 2).
 	for (i=0 ; i<256 ; i++)
 	{
 		j = i*intensity->value;
