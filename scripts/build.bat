@@ -31,6 +31,7 @@ copy .\working\%map%.bsp .\baseq2\maps
 if "%startengine%" == "1" (
 	echo --------------RUN---------------
 	pushd baseq2\maps
+	if not exist %quake2repo%\baseq2\maps mkdir %quake2repo%\baseq2\maps
 	copy %map%.bsp %quake2repo%\baseq2\maps
 	pushd %quake2repo%
 	call debug\Quake2.exe +map %1
