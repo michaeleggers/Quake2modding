@@ -1236,6 +1236,29 @@ gitem_t	itemlist[] =
 /* precache */ ""
 	},
 
+	/*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16)
+	*/
+	{
+		"item_coffee",
+		Pickup_Coffee,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar1_pkup.wav",
+		"models/items/pythno/coffee/tris.md2", EF_ROTATE,
+		NULL,
+		/* icon */		"i_jacketarmor",
+		/* pickup */	"Coffee Gives You POWER!!!",
+		/* width */		3,
+		0,
+		NULL,
+		IT_POWERUP,
+		0,
+		NULL, //&jacketarmor_info,
+		0,
+		/* precache */ ""
+	},
+
 /*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
@@ -2136,26 +2159,7 @@ tank commander's head
 		0,
 /* precache */ "items/s_health.wav items/n_health.wav items/l_health.wav items/m_health.wav"
 	},
-	{
-		NULL,
-		Pickup_Coffee,
-		NULL,
-		NULL,
-		NULL,
-		"items/pkup.wav",
-		NULL, 0,
-		NULL,
-		/* icon */		"i_health",
-		/* pickup */	"Coffee",
-		/* width */		3,
-		0,
-		NULL,
-		0,
-		0,
-		NULL,
-		0,
-		/* precache */ "items/s_health.wav items/n_health.wav items/l_health.wav items/m_health.wav"
-	},
+
 
 	// end of list marker
 	{NULL}
