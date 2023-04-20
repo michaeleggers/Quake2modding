@@ -351,5 +351,4 @@ MigrationBackup/
 
 
 # Don't include the baseq2 dir. Content of this dir must come from a Quake 2 install.
-**/baseq2
 **/DebugAxp
