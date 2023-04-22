@@ -57,6 +57,9 @@ field_t fields[] = {
 	{"origin", FOFS(s.origin), F_VECTOR},
 	{"angles", FOFS(s.angles), F_VECTOR},
 	{"angle", FOFS(s.angles), F_ANGLEHACK},
+	{"number", FOFS(number), F_INT},
+	{"number_sequence", FOFS(number_sequence), F_VECTOR},
+
 
 	{"goalentity", FOFS(goalentity), F_EDICT, FFL_NOSPAWN},
 	{"movetarget", FOFS(movetarget), F_EDICT, FFL_NOSPAWN},

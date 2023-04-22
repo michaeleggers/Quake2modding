@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctf", "ctf\ctf.vcxproj", "{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game\game.vcxproj", "{3959D042-B795-4FA9-A1E6-03F92BD102EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "quake2", "quake2.vcxproj", "{5745C6E7-99B5-42A0-892E-DE2A64D28BB2}"
@@ -22,16 +20,6 @@ Global
 		Template|x86 = Template|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Debug Alpha|x86.ActiveCfg = Debug Alpha|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Debug Alpha|x86.Build.0 = Debug Alpha|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Debug|x86.ActiveCfg = Debug|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Debug|x86.Build.0 = Debug|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Release Alpha|x86.ActiveCfg = Release Alpha|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Release Alpha|x86.Build.0 = Release Alpha|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Release|x86.ActiveCfg = Release|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Release|x86.Build.0 = Release|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Template|x86.ActiveCfg = Release Alpha|Win32
-		{BE52810E-4B8D-422C-BCA1-C8533FFDDC4B}.Template|x86.Build.0 = Release Alpha|Win32
 		{3959D042-B795-4FA9-A1E6-03F92BD102EF}.Debug Alpha|x86.ActiveCfg = Debug Alpha|Win32
 		{3959D042-B795-4FA9-A1E6-03F92BD102EF}.Debug Alpha|x86.Build.0 = Debug Alpha|Win32
 		{3959D042-B795-4FA9-A1E6-03F92BD102EF}.Debug|x86.ActiveCfg = Debug|Win32

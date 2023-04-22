@@ -325,16 +325,22 @@ After the counter has been triggered "count" times (default 2), it will fire all
 
 void trigger_counter_use(edict_t *self, edict_t *other, edict_t *activator)
 {
-	if (self->count == 0)
-		return;
+	static int times_pressed = 0; // HACK(Michael): clean this up?	
+
+	if (self->count == 0) {
+		self->count = self->save_count;
+		times_pressed = 0;
+	}	
 	
 	self->count--;
 
+	self->number_sequence_storage[times_pressed++] = other->number;
+	gi.centerprintf(activator, "Pressed button number %i", other->number);
 	if (self->count)
 	{
 		if (! (self->spawnflags & 1))
-		{
-			gi.centerprintf(activator, "%i more to go...", self->count);
+		{			
+			//gi.centerprintf(activator, "%i more to go...", self->count);
 			gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
 		}
 		return;
@@ -342,11 +348,19 @@ void trigger_counter_use(edict_t *self, edict_t *other, edict_t *activator)
 	
 	if (! (self->spawnflags & 1))
 	{
-		gi.centerprintf(activator, "Sequence completed!");
-		gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
+		//gi.centerprintf(activator, "Sequence completed!");
+		if (self->number_sequence[0] == self->number_sequence_storage[0] &&
+			self->number_sequence[1] == self->number_sequence_storage[1])
+		{
+			gi.centerprintf(activator, "WELCOME TO THE ELITE NEXT ROOM! (AND NEVER LEAVE) HAHAHA.");
+			self->activator = activator;
+			multi_trigger (self);
+			gi.sound (activator, CHAN_AUTO, gi.soundindex ("misc/talk1.wav"), 1, ATTN_NORM, 0);
+		}
+		else {
+			gi.centerprintf(activator, "The keycode is wrong! Try again :)");
+		}	
 	}
-	self->activator = activator;
-	multi_trigger (self);
 }
 
 void SP_trigger_counter (edict_t *self)
@@ -355,6 +369,7 @@ void SP_trigger_counter (edict_t *self)
 	if (!self->count)
 		self->count = 2;
 
+	self->save_count = self->count;
 	self->use = trigger_counter_use;
 }
 

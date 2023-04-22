@@ -1068,6 +1068,7 @@ struct edict_s
 	float		dmg_radius;
 	int			sounds;			//make this a spawntemp var?
 	int			count;
+	int			save_count; // NOTE(Michael): to remember the original counter value
 
 	edict_t		*chain;
 	edict_t		*enemy;
@@ -1110,6 +1111,11 @@ struct edict_s
 	moveinfo_t		moveinfo;
 	monsterinfo_t	monsterinfo;
 
-	qboolean      has_coffee;
+	qboolean		has_coffee;
+
+	// Just hold a number that can be sent to other entities
+	int				number;
+	vec3_t			number_sequence;
+	vec3_t          number_sequence_storage; // Remember what numbers have been pressed. Could live somewhere else actually!
 };
 

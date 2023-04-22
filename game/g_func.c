@@ -772,7 +772,7 @@ void SP_func_button (edict_t *ent)
 
 	if (ent->sounds != 1)
 		ent->moveinfo.sound_start = gi.soundindex ("switches/butn2.wav");
-	
+
 	if (!ent->speed)
 		ent->speed = 40;
 	if (!ent->accel)
