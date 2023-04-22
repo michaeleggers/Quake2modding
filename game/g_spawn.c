@@ -31,7 +31,7 @@ void SP_item_health (edict_t *self);
 void SP_item_health_small (edict_t *self);
 void SP_item_health_large (edict_t *self);
 void SP_item_health_mega (edict_t *self);
-void SP_item_coffee (edict_t *self);
+//void SP_item_coffee (edict_t *self);
 
 void SP_info_player_start (edict_t *ent);
 void SP_info_player_deathmatch (edict_t *ent);
@@ -154,7 +154,7 @@ spawn_t	spawns[] = {
 	{"item_health_small", SP_item_health_small},
 	{"item_health_large", SP_item_health_large},
 	{"item_health_mega", SP_item_health_mega},
-	{"item_coffee", SP_item_coffee},
+	//{"item_coffee", SP_item_coffee},
 
 	{"info_player_start", SP_info_player_start},
 	{"info_player_deathmatch", SP_info_player_deathmatch},
