@@ -59,7 +59,8 @@ void multi_trigger (edict_t *ent)
 		// called while looping through area links...
 		ent->touch = NULL;
 		ent->nextthink = level.time + FRAMETIME;
-		ent->think = G_FreeEdict;
+		//ent->think = G_FreeEdict; // HACK(Michael): Other entities also use this function. They will not behave the same enymore...
+		ent->think = multi_wait;
 	}
 }
 
