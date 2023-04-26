@@ -756,8 +756,6 @@ void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 	if (other->health <= 0)
 		return;
 	
-	//gi.AddCommandString("+attack 200 -1981281000");	
-
 	self->activator = other;
 	button_fire (self);
 }
@@ -803,7 +801,7 @@ void SP_func_button (edict_t *ent)
 	VectorMA (ent->pos1, dist, ent->movedir, ent->pos2);
 
 	ent->use = button_use;
-	ent->use_on_use_button = button_use_on_use_button;
+	//ent->use_on_use_button = button_use_on_use_button;
 
 	ent->s.effects |= EF_ANIM01;
 

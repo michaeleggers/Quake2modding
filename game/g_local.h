@@ -555,6 +555,7 @@ extern	cvar_t	*sv_maplist;
 // item spawnflags
 #define ITEM_TRIGGER_SPAWN		0x00000001
 #define ITEM_NO_TOUCH			0x00000002
+
 // 6 bits reserved for editor flags
 // 8 bits used as power cube id bits for coop games
 #define DROPPED_ITEM			0x00010000

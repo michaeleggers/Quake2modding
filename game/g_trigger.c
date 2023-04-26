@@ -76,6 +76,10 @@ void Touch_Multi (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *su
 	{
 		if (self->spawnflags & 2)
 			return;
+		// TODO(Michael): Check the actual spawnflag bits. What are 'save' to use?
+		else if (self->spawnflags & 8) { // NOTE(Michael): This is if BUTTON_USE has to be pressed in order to activate. 
+			if (~other->client->buttons & BUTTON_USE) return;
+		}
 	}
 	else if (other->svflags & SVF_MONSTER)
 	{
