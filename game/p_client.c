@@ -1577,6 +1577,10 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	level.current_entity = ent;
 	client = ent->client;
 
+	client->oldbuttons = client->buttons;
+	client->buttons = ucmd->buttons;
+	client->latched_buttons |= client->buttons & ~client->oldbuttons;
+
 	if (level.intermissiontime)
 	{
 		client->ps.pmove.pm_type = PM_FREEZE;
@@ -1693,16 +1697,18 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 					break;
 			if (j != i)
 				continue;	// duplicated
+			if (other->use_on_use_button) {		// TODO(Michael): This will only work if forward is pressed as well so the player really touches other! Maybe make new loop that checks for certain proximity		
+				other->use_on_use_button(other, ent, NULL);				
+			}
 			if (!other->touch)
 				continue;
 			other->touch (other, ent, NULL, NULL);
+
 		}
 
 	}
 
-	client->oldbuttons = client->buttons;
-	client->buttons = ucmd->buttons;
-	client->latched_buttons |= client->buttons & ~client->oldbuttons;
+
 
 	// save light level the player is standing on for
 	// monster sighting AI

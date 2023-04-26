@@ -735,9 +735,17 @@ void button_fire (edict_t *self)
 }
 
 void button_use (edict_t *self, edict_t *other, edict_t *activator)
-{
+{	
 	self->activator = activator;
 	button_fire (self);
+}
+
+void button_use_on_use_button (edict_t* self, edict_t* other, edict_t* activator)
+{
+	if (other->client->buttons & BUTTON_USE) {
+		self->activator = other;
+		button_fire(self);
+	}
 }
 
 void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf)
@@ -747,6 +755,8 @@ void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 
 	if (other->health <= 0)
 		return;
+	
+	//gi.AddCommandString("+attack 200 -1981281000");	
 
 	self->activator = other;
 	button_fire (self);
@@ -793,6 +803,8 @@ void SP_func_button (edict_t *ent)
 	VectorMA (ent->pos1, dist, ent->movedir, ent->pos2);
 
 	ent->use = button_use;
+	ent->use_on_use_button = button_use_on_use_button;
+
 	ent->s.effects |= EF_ANIM01;
 
 	if (ent->health)
@@ -801,8 +813,9 @@ void SP_func_button (edict_t *ent)
 		ent->die = button_killed;
 		ent->takedamage = DAMAGE_YES;
 	}
-	else if (! ent->targetname)
-		ent->touch = button_touch;
+	else if (!ent->targetname) {
+		ent->touch = button_touch;		
+	}
 
 	ent->moveinfo.state = STATE_BOTTOM;
 

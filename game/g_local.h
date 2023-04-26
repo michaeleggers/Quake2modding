@@ -1044,6 +1044,7 @@ struct edict_s
 	void		(*use)(edict_t *self, edict_t *other, edict_t *activator);
 	void		(*pain)(edict_t *self, edict_t *other, float kick, int damage);
 	void		(*die)(edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point);
+	void		(*use_on_use_button)(edict_t* self, edict_t* other, edict_t* activator);
 
 	float		touch_debounce_time;		// are all these legit?  do we need more/less of them?
 	float		pain_debounce_time;
