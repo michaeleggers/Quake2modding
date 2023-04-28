@@ -901,6 +901,44 @@ void GL_LightScaleTexture (unsigned *in, int inwidth, int inheight, qboolean onl
 			p[0] = gammatable[intensitytable[p[0]]];
 			p[1] = gammatable[intensitytable[p[1]]];
 			p[2] = gammatable[intensitytable[p[2]]];
+
+			//p[0] = intensitytable[p[0]];
+			//p[1] = intensitytable[p[1]];
+			//p[2] = intensitytable[p[2]];
+
+			// Tonemapping
+			//float r = (float)p[0] / 255.5;
+			//float g = (float)p[1] / 255.5;
+			//float b = (float)p[2] / 255.5;
+			//float save_r = r;
+			//float save_g = g;
+			//float save_b = b;
+
+			//float exposure = 1.0;
+			//r = 1.0 - exp(-r * exposure);
+			//g = 1.0 - exp(-g * exposure);
+			//b = 1.0 - exp(-b * exposure);
+			//r /= (r + 1.0);
+			//g /= (g + 1.0);
+			//b /= (b + 1.0);
+
+			// Fake Ambient
+			//r += save_r;
+			//g += save_g;
+			//b += save_b;
+
+			// Gamma correction
+			//r = pow(r, 1.0 / 2.2);
+			//g = pow(g, 1.0 / 2.2);
+			//b = pow(b, 1.0 / 2.2);
+
+			//p[0] = r * 255.5;
+			//p[1] = g * 255.5;
+			//p[2] = b * 255.5;
+
+			//p[0] = gammatable[p[0]];
+			//p[1] = gammatable[p[1]];
+			//p[2] = gammatable[p[2]];
 		}
 	}
 }
@@ -1513,7 +1551,8 @@ void	GL_InitImages (void)
 	registration_sequence = 1;
 
 	// init intensity conversions
-	intensity = ri.Cvar_Get ("intensity", "2", 0);
+	//intensity = ri.Cvar_Get ("intensity", "2", 0); // NOTE(Michael): I set this to one (see line below), so our textures won't be brightened up. (This affects the console brightness, though)... 
+	intensity = ri.Cvar_Get("intensity", "1", 0);
 
 	if ( intensity->value <= 1 )
 		ri.Cvar_Set( "intensity", "1" );
@@ -1544,7 +1583,7 @@ void	GL_InitImages (void)
 		{
 			float inf;
 
-			inf = 255 * pow ( (i+0.5)/255.5 , g ) + 0.5;
+			inf = 255 * pow ( (i+0.5)/255.5 , 1.0/g ) + 0.5;
 			if (inf < 0)
 				inf = 0;
 			if (inf > 255)
@@ -1553,10 +1592,11 @@ void	GL_InitImages (void)
 		}
 	}
 
-	// NOTE(Pythno): Seems like every intensity > 128 will be clamped to 255 (since intensity->value is set to 2).
+	// NOTE(Pythno): Seems like every intensity > 128 will be pushed to 255 (since intensity->value is set to 2).
 	for (i=0 ; i<256 ; i++)
 	{
 		j = i*intensity->value;
+
 		if (j > 255)
 			j = 255;
 		intensitytable[i] = j;
