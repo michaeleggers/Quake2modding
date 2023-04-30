@@ -1003,8 +1003,8 @@ qboolean uploaded_paletted;
 qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap)
 {
 	int			samples;
-	unsigned	scaled[256*256];
-	unsigned char paletted_texture[256*256];
+	unsigned	* scaled = malloc(1024*1024*4);
+	unsigned char * paletted_texture = malloc(1024*1024);
 	int			scaled_width, scaled_height;
 	int			i, c;
 	byte		*scan;
@@ -1029,10 +1029,10 @@ qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap)
 	}
 
 	// don't ever bother with >256 textures
-	if (scaled_width > 256)
-		scaled_width = 256;
-	if (scaled_height > 256)
-		scaled_height = 256;
+	if (scaled_width > 1024)
+		scaled_width = 1024;
+	if (scaled_height > 1024)
+		scaled_height = 1024;
 
 	if (scaled_width < 1)
 		scaled_width = 1;
@@ -1042,8 +1042,9 @@ qboolean GL_Upload32 (unsigned *data, int width, int height,  qboolean mipmap)
 	upload_width = scaled_width;
 	upload_height = scaled_height;
 
-	if (scaled_width * scaled_height > sizeof(scaled)/4)
-		ri.Sys_Error (ERR_DROP, "GL_Upload32: too big");
+	// NOTE(Michael): I want big textures to work!
+	//if (scaled_width * scaled_height > sizeof(scaled)/4)
+	//	ri.Sys_Error (ERR_DROP, "GL_Upload32: too big");
 
 	// scan the texture for any non-255 alpha
 	c = width*height;
@@ -1181,6 +1182,9 @@ done: ;
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, gl_filter_max);
 		qglTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, gl_filter_max);
 	}
+
+	free(paletted_texture);
+	free(scaled);
 
 	return (samples == gl_alpha_format);
 }
