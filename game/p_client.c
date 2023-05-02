@@ -1709,11 +1709,13 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		VectorNormalize2(look_at, look_at);
 		Com_Printf("Look At: ( %f, %f, %f )\n", look_at[0], look_at[1], look_at[2]);
 
-		VectorMA(player_pos, 300.0, look_at, end);
+		VectorMA(player_pos, 20.0, look_at, end);
 		Com_Printf("End Pos: ( %f, %f, %f )\n", end[0], end[1], end[2]);
 		trace_t trace = pm.trace(player_pos, pm.mins, pm.maxs, end);
 		if (trace.ent) {
-			Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
+			if (trace.ent->targetname) {
+				Com_Printf("Hit Entity: %s\n", trace.ent->targetname);				
+			}
 		}
 
 		// touch other objects
