@@ -737,6 +737,19 @@ void button_fire (edict_t *self)
 void button_use (edict_t *self, edict_t *other, edict_t *activator)
 {	
 	self->activator = activator;
+	vec3_t start = { 0 };
+	vec3_t angle = { 0 };
+	VectorCopy(activator->s.origin, start);
+	VectorCopy(activator->client->v_angle , angle);
+	vec3_t end = { 0.0, 100.0, 0.0 };
+	VectorMA(start, 500.0, angle, end);
+
+	//Com_Printf("Player Pos + Viewangle: ( %f, %f, %f )\n", end[0], end[1], end[2]);
+
+
+	vec3_t mins = { 0.0, 0.0, 0.0 };
+	vec3_t maxs = { 0.0, 0.0, 0.0 };
+	trace_t trace = gi.trace(start, mins, maxs, end, activator, 0);	
 	button_fire (self);
 }
 
