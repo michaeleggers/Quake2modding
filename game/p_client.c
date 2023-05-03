@@ -1691,27 +1691,22 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		// DEBUG(Michael): Print view-angle and pos of player
 		vec3_t player_view = { 0 };
 		VectorCopy(client->v_angle, player_view);
-		Com_Printf("Player View 1: ( %f, %f, %f )\n", player_view[0], player_view[1], player_view[2]);
-
-		// s_angles no good!
-		vec3_t s_angles = { 0 };
-		VectorCopy(ent->s.angles, s_angles);
-		//Com_Printf("Player View 2: ( %f, %f, %f )\n", s_angles[0], s_angles[1], s_angles[2]);
+		Com_Printf("Player View: ( %f, %f, %f )\n", player_view[0], player_view[1], player_view[2]);
 
 		vec3_t player_pos = { 0 };
 		VectorCopy(ent->s.origin, player_pos);
 		Com_Printf("Player Pos: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
 
-		vec3_t end = { 0.0 };		
-		VectorAdd(player_pos, player_view, end);
-		vec3_t look_at = { 0.0 };
-		VectorSubtract(end, player_pos, look_at);
-		VectorNormalize2(look_at, look_at);
-		Com_Printf("Look At: ( %f, %f, %f )\n", look_at[0], look_at[1], look_at[2]);
+		//Com_Printf("End Pos: ( %f, %f, %f )\n", end[0], end[1], end[2]);
 
-		VectorMA(player_pos, 20.0, look_at, end);
-		Com_Printf("End Pos: ( %f, %f, %f )\n", end[0], end[1], end[2]);
-		trace_t trace = pm.trace(player_pos, pm.mins, pm.maxs, end);
+		vec3_t end = { 0.0 };						
+		vec3_t forward, right, up;
+		AngleVectors(client->ps.viewangles, forward, right, up);
+		player_pos[2] += ent->viewheight;
+		VectorMA(player_pos, 50.0, forward, end);
+
+		//trace_t trace = pm.trace(player_pos, pm.mins, pm.maxs, end);
+		trace_t trace = gi.trace(player_pos, NULL, NULL, end, ent, MASK_SHOT);
 		if (trace.ent) {
 			if (trace.ent->targetname) {
 				Com_Printf("Hit Entity: %s\n", trace.ent->targetname);				
