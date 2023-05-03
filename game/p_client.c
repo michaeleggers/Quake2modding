@@ -1688,28 +1688,25 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		if (ent->movetype != MOVETYPE_NOCLIP)
 			G_TouchTriggers (ent);
 
-		// DEBUG(Michael): Print view-angle and pos of player
-		vec3_t player_view = { 0 };
-		VectorCopy(client->v_angle, player_view);
-		Com_Printf("Player View: ( %f, %f, %f )\n", player_view[0], player_view[1], player_view[2]);
-
+		// DEBUG(Michael): Shoot a ray into the scene to check what objects intersect
 		vec3_t player_pos = { 0 };
 		VectorCopy(ent->s.origin, player_pos);
 		Com_Printf("Player Pos: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
-
-		//Com_Printf("End Pos: ( %f, %f, %f )\n", end[0], end[1], end[2]);
 
 		vec3_t end = { 0.0 };						
 		vec3_t forward, right, up;
 		AngleVectors(client->ps.viewangles, forward, right, up);
 		player_pos[2] += ent->viewheight;
 		VectorMA(player_pos, 50.0, forward, end);
-
-		//trace_t trace = pm.trace(player_pos, pm.mins, pm.maxs, end);
+		Com_Printf("Player View: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
+		
 		trace_t trace = gi.trace(player_pos, NULL, NULL, end, ent, MASK_SHOT);
 		if (trace.ent) {
 			if (trace.ent->targetname) {
-				Com_Printf("Hit Entity: %s\n", trace.ent->targetname);				
+				Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
+				if (trace.ent->use_on_use_button) {
+					trace.ent->use_on_use_button(trace.ent, ent, ent);
+				}
 			}
 		}
 
@@ -1722,9 +1719,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 					break;
 			if (j != i)
 				continue;	// duplicated
-			if (other->use_on_use_button) {		// TODO(Michael): This will only work if forward is pressed as well so the player really touches other! Maybe make new loop that checks for certain proximity		
-				other->use_on_use_button(other, ent, NULL);				
-			}
+
 			if (!other->touch)
 				continue;
 			other->touch (other, ent, NULL, NULL);

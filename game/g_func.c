@@ -737,24 +737,13 @@ void button_fire (edict_t *self)
 void button_use (edict_t *self, edict_t *other, edict_t *activator)
 {	
 	self->activator = activator;
-	vec3_t start = { 0 };
-	vec3_t angle = { 0 };
-	VectorCopy(activator->s.origin, start);
-	VectorCopy(activator->client->v_angle , angle);
-	vec3_t end = { 0.0, 100.0, 0.0 };
-	VectorMA(start, 500.0, angle, end);
-
-	//Com_Printf("Player Pos + Viewangle: ( %f, %f, %f )\n", end[0], end[1], end[2]);
-
-
-	vec3_t mins = { 0.0, 0.0, 0.0 };
-	vec3_t maxs = { 0.0, 0.0, 0.0 };
-	trace_t trace = gi.trace(start, mins, maxs, end, activator, 0);	
 	button_fire (self);
 }
 
 void button_use_on_use_button (edict_t* self, edict_t* other, edict_t* activator)
 {
+	if (!other->client) return; // Don't bother if this is not the player.
+
 	if (other->client->buttons & BUTTON_USE) {
 		self->activator = other;
 		button_fire(self);
@@ -768,6 +757,7 @@ void button_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *s
 
 	if (other->health <= 0)
 		return;
+
 	
 	self->activator = other;
 	button_fire (self);
@@ -813,8 +803,12 @@ void SP_func_button (edict_t *ent)
 	dist = abs_movedir[0] * ent->size[0] + abs_movedir[1] * ent->size[1] + abs_movedir[2] * ent->size[2] - st.lip;
 	VectorMA (ent->pos1, dist, ent->movedir, ent->pos2);
 
-	ent->use = button_use;
-	//ent->use_on_use_button = button_use_on_use_button;
+	if (ent->spawnflags & 8) {
+		ent->use_on_use_button = button_use_on_use_button;
+	}
+	else {
+		ent->use = button_use;
+	}
 
 	ent->s.effects |= EF_ANIM01;
 
