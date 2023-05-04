@@ -471,18 +471,17 @@ void Mod_LoadTexinfo (lump_t *l)
 		    out->next = NULL;
 
 		// NOTE(Pythno): Wall Texture Loading Changed!
-		Com_sprintf (name, sizeof(name), "textures/%s.wal", in->texture);
+		Com_sprintf (name, sizeof(name), "textures/%s.tga", in->texture);
 		out->image = GL_FindImage (name, it_wall);
 		if ( (out->image == NULL) || (out->image == r_notexture) )
 		{
-			ri.Con_Printf (PRINT_ALL, "Couldn't load %s\nTrying to load TGA texture...\n", name);
-			Com_sprintf (name, sizeof(name), "textures/%s.tga", in->texture);
+			ri.Con_Printf (PRINT_ALL, "Couldn't load %s\nTrying to load WAL texture...\n", name);
+			Com_sprintf (name, sizeof(name), "textures/%s.wal", in->texture);
 			out->image = GL_FindImage (name, it_wall);
-
 		}
 		if ( (out->image == NULL) || (out->image == r_notexture) )
 		{
-			ri.Con_Printf (PRINT_ALL, "Couldn't load TGA either. Use r_notexture.\n\n", name);
+			ri.Con_Printf (PRINT_ALL, "Couldn't load WAL either. Use r_notexture.\n\n", name);
 			out->image = r_notexture;
 		}
 

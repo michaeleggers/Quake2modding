@@ -1691,19 +1691,19 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		// DEBUG(Michael): Shoot a ray into the scene to check what objects intersect
 		vec3_t player_pos = { 0 };
 		VectorCopy(ent->s.origin, player_pos);
-		Com_Printf("Player Pos: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
+		//Com_Printf("Player Pos: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
 
 		vec3_t end = { 0.0 };						
 		vec3_t forward, right, up;
 		AngleVectors(client->ps.viewangles, forward, right, up);
 		player_pos[2] += ent->viewheight;
 		VectorMA(player_pos, 50.0, forward, end);
-		Com_Printf("Player View: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
+		//Com_Printf("Player View: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
 		
 		trace_t trace = gi.trace(player_pos, NULL, NULL, end, ent, MASK_SHOT);
 		if (trace.ent) {
 			if (trace.ent->targetname) {
-				Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
+				//Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
 				if (trace.ent->use_on_use_button) {
 					trace.ent->use_on_use_button(trace.ent, ent, ent);
 				}

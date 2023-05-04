@@ -1352,9 +1352,19 @@ void CL_RequestNextDownload (void)
 			while (precache_tex < numtexinfo) {
 				char fn[MAX_OSPATH];
 
-				sprintf(fn, "textures/%s.wal", map_surfaces[precache_tex++].rname);
-				if (!CL_CheckOrDownloadFile(fn))
+				// Try to get the .wal texture
+				// TODO(Michael): Do we _still_ want to be able to load .wal textures? If so, think about how to load them.
+				sprintf(fn, "textures/%s.wal", map_surfaces[precache_tex].rname);
+				int file_found = FS_LoadFile(fn, NULL);
+				if (file_found  == -1) { // If .wal not found, see if a .tga version exists
+					sprintf(fn, "textures/%s.tga", map_surfaces[precache_tex].rname);
+				}
+				precache_tex++;
+				qboolean texture_exists = CL_CheckOrDownloadFile(fn);				
+				
+				if (!texture_exists) {
 					return; // started a download
+				}
 			}
 		}
 		precache_check = TEXTURE_CNT+999;
