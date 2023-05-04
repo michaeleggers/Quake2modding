@@ -352,7 +352,7 @@ typedef struct
 	vec3_t		skyaxis;
 	char		*nextmap;
 
-	int			lip;
+	float		lip;
 	int			distance;
 	int			height;
 	char		*noise;

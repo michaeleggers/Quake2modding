@@ -98,7 +98,7 @@ field_t fields[] = {
 	{"endfunc", FOFS(moveinfo.endfunc), F_FUNCTION, FFL_NOSPAWN},
 
 	// temp spawn vars -- only valid when the spawn function is called
-	{"lip", STOFS(lip), F_INT, FFL_SPAWNTEMP},
+	{"lip", STOFS(lip), F_FLOAT, FFL_SPAWNTEMP},
 	{"distance", STOFS(distance), F_INT, FFL_SPAWNTEMP},
 	{"height", STOFS(height), F_INT, FFL_SPAWNTEMP},
 	{"noise", STOFS(noise), F_LSTRING, FFL_SPAWNTEMP},
