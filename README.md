@@ -159,4 +159,8 @@ Repo for the "Modding Quake 2" journey: https://www.youtube.com/playlist?list=PL
   set vid_fullscreen "0"
   set viewsize "100"
   ```
+- At this point a few modifications were made that require assets that do not come with the Quake 2
+  shareware or retail version. At the moment this is only: ```assets/pics/select_item_paletted.pcx```.
+  This pic is for drawing the HUD element when the player comes close to a button that has
+  spawnflag 8. So, in order to run, this pcx file must be copied to ```baseq2/pics/```.
   
