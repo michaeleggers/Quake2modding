@@ -893,6 +893,7 @@ struct gclient_s
 	qboolean	showinventory;		// set layout stat
 	qboolean	showhelp;
 	qboolean	showhelpicon;
+	qboolean	showusehud;			// NOTE(Michael): Draws a use HUD instead of crosshair if player is close to a usable item.
 
 	int			ammo_index;
 

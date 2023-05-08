@@ -443,6 +443,11 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_PICKUP_STRING] = 0;
 	}
 
+	ent->client->ps.stats[STAT_HUD_USE] = 0;
+	if (ent->client->showusehud) {
+		ent->client->ps.stats[STAT_HUD_USE] = 1;
+	}
+
 	//
 	// timers
 	//
@@ -520,6 +525,7 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_HELPICON] = 0;
 
 	ent->client->ps.stats[STAT_SPECTATOR] = 0;
+
 }
 
 /*

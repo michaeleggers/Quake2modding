@@ -434,6 +434,17 @@ void SCR_DrawCrosshair (void)
 }
 
 /*
+=================
+SCR_DrawUseHUD
+=================
+*/
+void SCR_DrawUseHUD(void)
+{
+	re.DrawPic(scr_vrect.x + ((scr_vrect.width - 128) >> 1),
+		scr_vrect.y + ((scr_vrect.height - 128) >> 1), "select_item_paletted");
+}
+
+/*
 ==================
 V_RenderView
 
@@ -544,7 +555,12 @@ void V_RenderView( float stereo_separation )
 	SCR_AddDirtyPoint (scr_vrect.x+scr_vrect.width-1,
 		scr_vrect.y+scr_vrect.height-1);
 
-	SCR_DrawCrosshair ();
+	if (cl.frame.playerstate.stats[STAT_HUD_USE]) { // TODO(Michael): Should this be in cl_scrn?
+		SCR_DrawUseHUD ();
+	}
+	else {
+		SCR_DrawCrosshair ();
+	}
 }
 
 

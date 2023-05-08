@@ -1700,13 +1700,15 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		VectorMA(player_pos, 50.0, forward, end);
 		//Com_Printf("Player View: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
 		
+		client->showusehud = false;
 		trace_t trace = gi.trace(player_pos, NULL, NULL, end, ent, MASK_SHOT);
 		if (trace.ent) {
 			if (trace.ent->targetname) {
 				//Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
 				if (trace.ent->use_on_use_button) {
 					trace.ent->use_on_use_button(trace.ent, ent, ent);
-				}
+					client->showusehud = true;
+				}			
 			}
 		}
 
