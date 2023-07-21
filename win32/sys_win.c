@@ -608,7 +608,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// if we find the CD, add a +set cddir xxx command line
 	//cddir = Sys_ScanForCD ();
 	cddir = NULL; // NOTE(Michael): On some systems this will take forever (not sure why...) so for now we
-	// never check for CD!
+				  //				never check for CD!
 	if (cddir && argc < MAX_NUM_ARGVS - 3)
 	{
 		int		i;
