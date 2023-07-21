@@ -132,8 +132,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <OutputFile>.\DebugAxp\quake2.exe</OutputFile>
-      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies);liblua54;liblua54.a</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -173,7 +174,8 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <OutputFile>.\debug\quake2.exe</OutputFile>
-      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies);liblua54.a</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -213,7 +215,8 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <OutputFile>.\release\quake2.exe</OutputFile>
-      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies);liblua54;liblua54.a</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'">
@@ -253,8 +256,15 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <OutputFile>.\ReleaseAXP\quake2.exe</OutputFile>
-      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies);liblua54;liblua54.a</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);liblua54;liblua54.a</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

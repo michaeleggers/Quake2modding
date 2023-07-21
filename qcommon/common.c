@@ -21,6 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "qcommon.h"
 #include <setjmp.h>
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
+
+
 #define	MAXPRINTMSG	4096
 
 #define MAX_NUM_ARGVS	50
@@ -1389,6 +1393,16 @@ void Com_Error_f (void)
 	Com_Error (ERR_FATAL, "%s", Cmd_Argv(1));
 }
 
+int Lua_Com_Printf(lua_State* pLuaState) {
+	//Com_Printf("HELLO FROM LUA!!!\n");
+		
+	luaL_checktype(pLuaState, 1, LUA_TSTRING);
+	const char* str = lua_tostring(pLuaState, 1);
+
+	Com_Printf("%s\n", str);
+
+	return 0;
+}
 
 /*
 =================
@@ -1481,6 +1495,22 @@ void Qcommon_Init (int argc, char **argv)
 	}
 
 	Com_Printf ("====== Quake2 Initialized ======\n\n");	
+
+	Com_Printf("=== Init Lua Interpreter ===\n\n");
+	/* Init Lua state */
+	lua_State* pLuaState = luaL_newstate();
+	luaL_openlibs(pLuaState);
+	lua_register(pLuaState, "Com_Printf", Lua_Com_Printf);
+	fprintf(stdout, "Initializing Lua...\n");
+	if (luaL_loadfile(pLuaState, "baseq2/scripts/init.lua") || lua_pcall(pLuaState, 0, 0, 0)) {
+		Com_Printf("ERROR: Could not initialize LUA: %s!\n\n", lua_tostring(pLuaState, -1));
+		fprintf(stderr, "ERROR: Could not initialize LUA: %s!\n", lua_tostring(pLuaState, -1));
+	}
+	else {
+		Com_Printf("=== Lua Interpreter Initialized ===\n\n");
+	}
+	//lua_close(pLuaState);
+	/* TODO(Michael): Cleanup Lua */
 }
 
 /*

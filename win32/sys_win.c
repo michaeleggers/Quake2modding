@@ -628,6 +628,16 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	Qcommon_Init (argc, argv);
 	oldtime = Sys_Milliseconds ();
 
+	/* Create debug console */
+	AllocConsole();
+	FILE* pCin;
+	FILE* pCout;
+	FILE* pCerr;
+	freopen_s(&pCin, "conin$", "r", stdin);
+	freopen_s(&pCout, "conout$", "w", stdout);
+	freopen_s(&pCerr, "conout$", "w", stderr);
+	/* TODO(Michael): Cleanup Console */
+
     /* main window message loop */
 	while (1)
 	{
