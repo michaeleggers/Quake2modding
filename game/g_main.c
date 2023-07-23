@@ -77,6 +77,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo);
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 void ClientDisconnect (edict_t *ent);
 void ClientBegin (edict_t *ent);
+void SpawnEntity(const char* entity_string);
 void ClientCommand (edict_t *ent);
 void RunEntity (edict_t *ent);
 void WriteGame (char *filename, qboolean autosave);
@@ -126,6 +127,7 @@ game_export_t *GetGameAPI (game_import_t *import)
 	globals.ClientUserinfoChanged = ClientUserinfoChanged;
 	globals.ClientDisconnect = ClientDisconnect;
 	globals.ClientBegin = ClientBegin;
+	globals.SpawnEntity = SpawnEntity;
 	globals.ClientCommand = ClientCommand;
 
 	globals.RunFrame = G_RunFrame;

@@ -95,6 +95,15 @@ void Com_EndRedirect (void)
 }
 
 /*
+============================================================================
+
+Lua scripting Interpreter
+
+============================================================================
+*/
+lua_State* pLuaState;
+
+/*
 =============
 Com_Printf
 
@@ -1504,7 +1513,7 @@ void Qcommon_Init (int argc, char **argv)
 
 	Com_Printf("=== Init Lua Interpreter ===\n\n");
 	/* Init Lua state */
-	lua_State* pLuaState = luaL_newstate();
+	pLuaState = luaL_newstate();
 	luaL_openlibs(pLuaState);
 	lua_register(pLuaState, "Com_Printf", Lua_Com_Printf);
 	fprintf(stdout, "Initializing Lua...\n");
@@ -1514,6 +1523,7 @@ void Qcommon_Init (int argc, char **argv)
 	}
 	else {
 		Com_Printf("=== Lua Interpreter Initialized ===\n\n");
+		fprintf(stdout, "SUCCESS: LUA interpreter initialized.\n");
 	}
 	//lua_close(pLuaState);
 	/* TODO(Michael): Cleanup Lua */

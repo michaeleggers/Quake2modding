@@ -23,6 +23,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 server_static_t	svs;				// persistant server info
 server_t		sv;					// local server
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
+
+extern lua_State* pLuaState;
+
+int Lua_SpawnItem(lua_State* pLuaState) {
+	luaL_checktype(pLuaState, 1, LUA_TSTRING);
+	const char* item_name = lua_tostring(pLuaState, 1);
+	luaL_checktype(pLuaState, 2, LUA_TNUMBER);
+	double posX = lua_tonumber(pLuaState, 2);
+	luaL_checktype(pLuaState, 3, LUA_TNUMBER);
+	double posY = lua_tonumber(pLuaState, 3);
+	luaL_checktype(pLuaState, 4, LUA_TNUMBER);
+	double posZ = lua_tonumber(pLuaState, 4);
+
+	Com_Printf("SpawnItem: %s, %f, %f, %f\n", item_name, posX, posY, posZ);
+	printf("SpawnItem: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
+	char entity_string[256] = { 0 };	
+	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", item_name, posX, posY, posZ);
+	ge->SpawnEntity(entity_string);
+
+	return 0;
+}
+
+
+
 /*
 ================
 SV_FindIndex
@@ -259,6 +285,11 @@ void SV_SpawnServer (char *server, char *spawnpoint, server_state_t serverstate,
 	// load and spawn all other entities
 	ge->SpawnEntities ( sv.name, CM_EntityString(), spawnpoint );
 
+	// TEST(Michael): Use Lua to spawn an item
+	if (luaL_loadfile(pLuaState, "baseq2/scripts/spawn_server.lua") || lua_pcall(pLuaState, 0, 0, 0)) {
+		Com_Printf("ERROR: %s!\n\n", lua_tostring(pLuaState, -1));
+	}	
+
 	// run two frames to allow everything to settle
 	ge->RunFrame ();
 	ge->RunFrame ();
@@ -371,6 +402,9 @@ void SV_InitGame (void)
 		svs.clients[i].edict = ent;
 		memset (&svs.clients[i].lastcmd, 0, sizeof(svs.clients[i].lastcmd));
 	}
+
+	// Register C functions for Lua
+	lua_register(pLuaState, "SpawnItem", Lua_SpawnItem);
 }
 
 

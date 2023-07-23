@@ -389,7 +389,7 @@ void NET_SendPacket (netsrc_t sock, int length, void *data, netadr_t to)
 	struct sockaddr	addr;
 	int		net_socket;
 
-	if ( to.type == NA_LOOPBACK )
+	if ( to.type == NA_LOOPBACK ) // NOTE(Michael): Singleplayer or Hosting Game
 	{
 		NET_SendLoopPacket (sock, length, data, to);
 		return;
