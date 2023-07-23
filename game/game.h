@@ -192,6 +192,8 @@ typedef struct
 	void	(*AddCommandString) (char *text);
 
 	void	(*DebugGraph) (float value, int color);
+
+	void    (*CallLuaScript) (const char* script_name);
 } game_import_t;
 
 //

@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "g_local.h"
 
+
 /*QUAKED target_temp_entity (1 0 0) (-8 -8 -8) (8 8 8)
 Fire an origin based temp entity event to the clients.
 "style"		type byte
@@ -806,4 +807,29 @@ void SP_target_earthquake (edict_t *self)
 	self->use = target_earthquake_use;
 
 	self->noise_index = gi.soundindex ("world/quake.wav");
+}
+
+void target_script_use(edict_t* self, edict_t* other, edict_t* activator)
+{
+	self->timestamp = level.time + self->count;
+	self->nextthink = level.time + FRAMETIME;
+	self->activator = activator;
+	self->last_move_time = 0;
+	char script_name[256];
+	sprintf(script_name, "baseq2/scripts/%s", self->targetname);
+	//gi.AddCommandString(script_cmd);
+	gi.CallLuaScript(script_name);
+}
+
+void target_script_think(edict_t* self)
+{
+	// Script does all the thinking for now.
+	// Maybe we could update a timer here or something.
+}
+
+void SP_target_script(edict_t* self)
+{
+	self->think = target_script_think;
+	self->use = target_script_use;
+	// TODO: Implement delay
 }

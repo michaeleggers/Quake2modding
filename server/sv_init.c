@@ -28,7 +28,7 @@ server_t		sv;					// local server
 
 extern lua_State* pLuaState;
 
-int Lua_SpawnItem(lua_State* pLuaState) {
+int Lua_SpawnEntity(lua_State* pLuaState) {
 	luaL_checktype(pLuaState, 1, LUA_TSTRING);
 	const char* item_name = lua_tostring(pLuaState, 1);
 	luaL_checktype(pLuaState, 2, LUA_TNUMBER);
@@ -38,8 +38,8 @@ int Lua_SpawnItem(lua_State* pLuaState) {
 	luaL_checktype(pLuaState, 4, LUA_TNUMBER);
 	double posZ = lua_tonumber(pLuaState, 4);
 
-	Com_Printf("SpawnItem: %s, %f, %f, %f\n", item_name, posX, posY, posZ);
-	printf("SpawnItem: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
+	Com_Printf("SpawnEntity: %s, %f, %f, %f\n", item_name, posX, posY, posZ);
+	printf("SpawnEntity: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
 	char entity_string[256] = { 0 };	
 	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", item_name, posX, posY, posZ);
 	ge->SpawnEntity(entity_string);
@@ -404,7 +404,7 @@ void SV_InitGame (void)
 	}
 
 	// Register C functions for Lua
-	lua_register(pLuaState, "SpawnItem", Lua_SpawnItem);
+	lua_register(pLuaState, "SpawnEntity", Lua_SpawnEntity);
 }
 
 

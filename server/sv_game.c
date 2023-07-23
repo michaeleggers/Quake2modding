@@ -21,6 +21,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "server.h"
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
+
+extern lua_State* pLuaState;
+
 game_export_t	*ge;
 
 
@@ -320,6 +325,13 @@ Init the game subsystem for a new map
 */
 void SCR_DebugGraph (float value, int color);
 
+void CallLuaScript(const char* script_name)
+{
+	if (luaL_loadfile(pLuaState, script_name) || lua_pcall(pLuaState, 0, 0, 0)) {
+		Com_Printf("ERROR: %s!\n\n", lua_tostring(pLuaState, -1));
+	}
+}
+
 void SV_InitGameProgs (void)
 {
 	game_import_t	import;
@@ -382,6 +394,8 @@ void SV_InitGameProgs (void)
 	import.DebugGraph = SCR_DebugGraph;
 	import.SetAreaPortalState = CM_SetAreaPortalState;
 	import.AreasConnected = CM_AreasConnected;
+
+	import.CallLuaScript = CallLuaScript;
 
 	ge = (game_export_t *)Sys_GetGameAPI (&import);
 
