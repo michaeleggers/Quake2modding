@@ -1402,22 +1402,22 @@ void Com_Error_f (void)
 	Com_Error (ERR_FATAL, "%s", Cmd_Argv(1));
 }
 
-int Lua_Com_Printf(lua_State* pLuaState) {	
-	//luaL_checktype(pLuaState, 1, LUA_TSTRING);
-	char buffer[256] = { 0 };
-	if (lua_type(pLuaState, -1) == LUA_TSTRING) {
-		const char* str = lua_tostring(pLuaState, 1);
-		sprintf(buffer, "%s\n", str);
-	}
-	else if (lua_type(pLuaState, -1) == LUA_TNUMBER) {
-		double number = lua_tonumber(pLuaState, 1);
-		sprintf(buffer, "%f\n", number);
-	}
-
-	Com_Printf("%s\n", buffer);
-
-	return 0;
-}
+//int Lua_Com_Printf(lua_State* pLuaState) {	
+//	//luaL_checktype(pLuaState, 1, LUA_TSTRING);
+//	char buffer[256] = { 0 };
+//	if (lua_type(pLuaState, -1) == LUA_TSTRING) {
+//		const char* str = lua_tostring(pLuaState, 1);
+//		sprintf(buffer, "%s\n", str);
+//	}
+//	else if (lua_type(pLuaState, -1) == LUA_TNUMBER) {
+//		double number = lua_tonumber(pLuaState, 1);
+//		sprintf(buffer, "%f\n", number);
+//	}
+//
+//	Com_Printf("%s\n", buffer);
+//
+//	return 0;
+//}
 
 /*
 =================

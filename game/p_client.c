@@ -1349,12 +1349,14 @@ void ClientBegin (edict_t *ent)
 	ClientEndServerFrame (ent);
 }
 
-void SpawnEntity(const char* entity_string) {
+edict_t* SpawnEntity(const char* entity_string) {
 	edict_t* ent = G_Spawn();
 	ED_ParseEdict(entity_string, ent);
 	ent->spawnflags &= ~(SPAWNFLAG_NOT_EASY | SPAWNFLAG_NOT_MEDIUM | SPAWNFLAG_NOT_HARD | SPAWNFLAG_NOT_COOP | SPAWNFLAG_NOT_DEATHMATCH);	
 	ED_CallSpawn(ent);
 	//gi.linkentity(ent); // TODO(Michael): Needed?
+
+	return ent;
 }
 
 /*

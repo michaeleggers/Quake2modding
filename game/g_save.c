@@ -20,6 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "g_local.h"
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
+
+extern lua_State* pLuaState;
+
 #define Function(f) {#f, f}
 
 mmove_t mmove_reloc;
@@ -222,6 +227,23 @@ void InitGame (void)
 	game.maxclients = maxclients->value;
 	game.clients = gi.TagMalloc (game.maxclients * sizeof(game.clients[0]), TAG_GAME);
 	globals.num_edicts = game.maxclients+1;
+
+	/* Init Lua state */
+	if (pLuaState == NULL) {
+		pLuaState = luaL_newstate();
+		luaL_openlibs(pLuaState);		
+		lua_register(pLuaState, "Com_Printf", Lua_Com_Printf);
+		if (luaL_loadfile(pLuaState, "baseq2/scripts/init.lua") || lua_pcall(pLuaState, 0, 0, 0)) {
+			Com_Printf("ERROR (GameDLL): Could not initialize LUA: %s!\n\n", lua_tostring(pLuaState, -1));
+			fprintf(stderr, "ERROR (GameDLL): Could not initialize LUA: %s!\n", lua_tostring(pLuaState, -1));
+		}
+		else {
+			Com_Printf("=== Lua Interpreter Initialized ===\n\n");
+			fprintf(stdout, "SUCCESS (GameDLL): LUA interpreter initialized.\n");
+		}
+		//lua_close(pLuaState);
+		/* TODO(Michael): Cleanup Lua */
+	}
 }
 
 //=========================================================

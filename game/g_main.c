@@ -20,6 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "g_local.h"
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
+
+lua_State* pLuaState = NULL;
+
 game_locals_t	game;
 level_locals_t	level;
 game_import_t	gi;
@@ -77,7 +82,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo);
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 void ClientDisconnect (edict_t *ent);
 void ClientBegin (edict_t *ent);
-void SpawnEntity(const char* entity_string);
+edict_t* SpawnEntity(const char* entity_string);
 void ClientCommand (edict_t *ent);
 void RunEntity (edict_t *ent);
 void WriteGame (char *filename, qboolean autosave);

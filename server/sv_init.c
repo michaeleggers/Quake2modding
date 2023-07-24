@@ -29,6 +29,8 @@ server_t		sv;					// local server
 extern lua_State* pLuaState;
 
 int Lua_SpawnEntity(lua_State* pLuaState) {
+
+	// TODO(Michael): Use luaL_checknumber and checkstring(?)
 	luaL_checktype(pLuaState, 1, LUA_TSTRING);
 	const char* item_name = lua_tostring(pLuaState, 1);
 	luaL_checktype(pLuaState, 2, LUA_TNUMBER);
@@ -42,9 +44,11 @@ int Lua_SpawnEntity(lua_State* pLuaState) {
 	printf("SpawnEntity: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
 	char entity_string[256] = { 0 };	
 	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", item_name, posX, posY, posZ);
-	ge->SpawnEntity(entity_string);
+	edict_t* entity = ge->SpawnEntity(entity_string);
+	
+	lua_pushnumber(pLuaState, entity->s.number);
 
-	return 0;
+	return 1;
 }
 
 

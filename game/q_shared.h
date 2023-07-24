@@ -54,6 +54,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 typedef unsigned char 		byte;
 typedef enum {false, true}	qboolean;
 
+#include "../lua/lua-5.4.2_Win32/include/lua.h"
+#include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
 
 #ifndef NULL
 #define NULL ((void *)0)
@@ -1199,3 +1201,6 @@ typedef struct
 extern int vidref_val;
 // PGM
 // ==================
+
+
+int Lua_Com_Printf(lua_State* pLuaState);
