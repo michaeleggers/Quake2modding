@@ -288,6 +288,8 @@ void SV_InitGameProgs (void);
 void SV_ShutdownGameProgs (void);
 void SV_InitEdict (edict_t *e);
 
+lua_State* SV_GetLuaState(void);
+int Lua_Init();
 
 
 //============================================================

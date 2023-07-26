@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "g_local.h"
 
+extern lua_State* pLuaState;
+
 
 /*QUAKED target_temp_entity (1 0 0) (-8 -8 -8) (8 8 8)
 Fire an origin based temp entity event to the clients.
@@ -818,7 +820,7 @@ void target_script_use(edict_t* self, edict_t* other, edict_t* activator)
 	char script_name[256];
 	sprintf(script_name, "baseq2/scripts/%s", self->targetname);
 	//gi.AddCommandString(script_cmd);
-	gi.CallLuaScript(script_name);
+	Lua_CallScript(script_name);
 }
 
 void target_script_think(edict_t* self)

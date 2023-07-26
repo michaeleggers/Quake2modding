@@ -193,7 +193,7 @@ typedef struct
 
 	void	(*DebugGraph) (float value, int color);
 
-	void    (*CallLuaScript) (const char* script_name);
+	lua_State* (*SV_GetLuaState)(void);
 } game_import_t;
 
 //

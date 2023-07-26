@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../lua/lua-5.4.2_Win32/include/lua.h"
 #include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
 
-lua_State* pLuaState = NULL;
+extern lua_State* pLuaState;
 
 game_locals_t	game;
 level_locals_t	level;

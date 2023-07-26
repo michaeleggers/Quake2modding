@@ -220,8 +220,9 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\..\debug\ref_gl.dll</OutputFile>
       <ImportLibrary>.\..\debug\ref_gl.lib</ImportLibrary>
-      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;liblua54.a;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\ref_gl.def</ModuleDefinitionFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)lua\lua-5.4.2_Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

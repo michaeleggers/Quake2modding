@@ -101,7 +101,7 @@ Lua scripting Interpreter
 
 ============================================================================
 */
-lua_State* pLuaState;
+extern lua_State* pLuaState;
 
 /*
 =============
@@ -1402,22 +1402,6 @@ void Com_Error_f (void)
 	Com_Error (ERR_FATAL, "%s", Cmd_Argv(1));
 }
 
-//int Lua_Com_Printf(lua_State* pLuaState) {	
-//	//luaL_checktype(pLuaState, 1, LUA_TSTRING);
-//	char buffer[256] = { 0 };
-//	if (lua_type(pLuaState, -1) == LUA_TSTRING) {
-//		const char* str = lua_tostring(pLuaState, 1);
-//		sprintf(buffer, "%s\n", str);
-//	}
-//	else if (lua_type(pLuaState, -1) == LUA_TNUMBER) {
-//		double number = lua_tonumber(pLuaState, 1);
-//		sprintf(buffer, "%f\n", number);
-//	}
-//
-//	Com_Printf("%s\n", buffer);
-//
-//	return 0;
-//}
 
 /*
 =================
@@ -1510,23 +1494,6 @@ void Qcommon_Init (int argc, char **argv)
 	}
 
 	Com_Printf ("====== Quake2 Initialized ======\n\n");	
-
-	Com_Printf("=== Init Lua Interpreter ===\n\n");
-	/* Init Lua state */
-	pLuaState = luaL_newstate();
-	luaL_openlibs(pLuaState);
-	lua_register(pLuaState, "Com_Printf", Lua_Com_Printf);
-	fprintf(stdout, "Initializing Lua...\n");
-	if (luaL_loadfile(pLuaState, "baseq2/scripts/init.lua") || lua_pcall(pLuaState, 0, 0, 0)) {
-		Com_Printf("ERROR: Could not initialize LUA: %s!\n\n", lua_tostring(pLuaState, -1));
-		fprintf(stderr, "ERROR: Could not initialize LUA: %s!\n", lua_tostring(pLuaState, -1));
-	}
-	else {
-		Com_Printf("=== Lua Interpreter Initialized ===\n\n");
-		fprintf(stdout, "SUCCESS: LUA interpreter initialized.\n");
-	}
-	//lua_close(pLuaState);
-	/* TODO(Michael): Cleanup Lua */
 }
 
 /*

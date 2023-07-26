@@ -1203,4 +1203,5 @@ extern int vidref_val;
 // ==================
 
 
+int Lua_CallScript(const char* script_name);
 int Lua_Com_Printf(lua_State* pLuaState);

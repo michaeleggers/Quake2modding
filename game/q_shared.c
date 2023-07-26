@@ -19,9 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "q_shared.h"
 
+extern lua_State* pLuaState;
+
 #define DEG2RAD( a ) ( a * M_PI ) / 180.0F
 
 vec3_t vec3_origin = {0,0,0};
+
+
 
 //============================================================================
 
@@ -1415,6 +1419,20 @@ void Info_SetValueForKey (char *s, char *key, char *value)
 
 //====================================================================
 
+
+int Lua_CallScript(const char* script_name) {
+	if (luaL_loadfile(pLuaState, script_name) || lua_pcall(pLuaState, 0, 0, 0)) {
+		Com_Printf("ERROR running Lua script: %s!\n\n", lua_tostring(pLuaState, -1));
+		fprintf(stderr, "ERROR running Lua script: %s!\n", lua_tostring(pLuaState, -1));
+	}
+	else {
+		Com_Printf("Ran lua script...\n");
+		fprintf(stdout, "Ran lua script\n");
+	}
+
+	return 0;
+}
+
 int Lua_Com_Printf(lua_State* pLuaState) {
 	//luaL_checktype(pLuaState, 1, LUA_TSTRING);
 	char buffer[256] = { 0 };
@@ -1431,3 +1449,5 @@ int Lua_Com_Printf(lua_State* pLuaState) {
 
 	return 0;
 }
+
+

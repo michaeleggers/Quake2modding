@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../lua/lua-5.4.2_Win32/include/lauxlib.h"
 
 
-extern lua_State* pLuaState;
+lua_State* pLuaState;
 
 netadr_t	master_adr[MAX_MASTERS];	// address of group servers
 
@@ -984,7 +984,33 @@ void SV_Init (void)
 	sv_reconnect_limit = Cvar_Get ("sv_reconnect_limit", "3", CVAR_ARCHIVE);
 
 	SZ_Init (&net_message, net_message_buffer, sizeof(net_message_buffer));
+
+	Lua_Init();
 }
+
+lua_State* SV_GetLuaState(void) 
+{
+	return pLuaState;
+}
+
+int Lua_Init() {
+	Com_Printf("=== Init Lua Interpreter ===\n\n");
+	/* Init Lua state */
+	pLuaState = luaL_newstate();
+	luaL_openlibs(pLuaState);
+	lua_register(pLuaState, "Lua_CallScript", Lua_CallScript);
+	lua_register(pLuaState, "Com_Printf", Lua_Com_Printf);
+	fprintf(stdout, "Initializing Lua...\n");
+	if (luaL_loadfile(pLuaState, "baseq2/scripts/init.lua") || lua_pcall(pLuaState, 0, 0, 0)) {
+		Com_Printf("ERROR: Could not initialize LUA: %s!\n\n", lua_tostring(pLuaState, -1));
+		fprintf(stderr, "ERROR: Could not initialize LUA: %s!\n", lua_tostring(pLuaState, -1));
+	}
+	else {
+		Com_Printf("=== Lua Interpreter Initialized ===\n\n");
+		fprintf(stdout, "SUCCESS: LUA interpreter initialized.\n");
+	}
+}
+
 
 /*
 ==================
@@ -1057,5 +1083,7 @@ void SV_Shutdown (char *finalmsg, qboolean reconnect)
 	if (svs.demofile)
 		fclose (svs.demofile);
 	memset (&svs, 0, sizeof(svs));
+
+	lua_close(pLuaState); // TODO(Michael): Maybe too early! Lua might still be useful in Sys_Quit or Sys_Error.
 }
 

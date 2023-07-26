@@ -28,28 +28,7 @@ server_t		sv;					// local server
 
 extern lua_State* pLuaState;
 
-int Lua_SpawnEntity(lua_State* pLuaState) {
 
-	// TODO(Michael): Use luaL_checknumber and checkstring(?)
-	luaL_checktype(pLuaState, 1, LUA_TSTRING);
-	const char* item_name = lua_tostring(pLuaState, 1);
-	luaL_checktype(pLuaState, 2, LUA_TNUMBER);
-	double posX = lua_tonumber(pLuaState, 2);
-	luaL_checktype(pLuaState, 3, LUA_TNUMBER);
-	double posY = lua_tonumber(pLuaState, 3);
-	luaL_checktype(pLuaState, 4, LUA_TNUMBER);
-	double posZ = lua_tonumber(pLuaState, 4);
-
-	Com_Printf("SpawnEntity: %s, %f, %f, %f\n", item_name, posX, posY, posZ);
-	printf("SpawnEntity: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
-	char entity_string[256] = { 0 };	
-	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", item_name, posX, posY, posZ);
-	edict_t* entity = ge->SpawnEntity(entity_string);
-	
-	lua_pushnumber(pLuaState, entity->s.number);
-
-	return 1;
-}
 
 
 
@@ -406,9 +385,6 @@ void SV_InitGame (void)
 		svs.clients[i].edict = ent;
 		memset (&svs.clients[i].lastcmd, 0, sizeof(svs.clients[i].lastcmd));
 	}
-
-	// Register C functions for Lua
-	lua_register(pLuaState, "SpawnEntity", Lua_SpawnEntity);
 }
 
 

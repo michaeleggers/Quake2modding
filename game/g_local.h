@@ -1122,3 +1122,5 @@ struct edict_s
 	vec3_t          number_sequence_storage; // Remember what numbers have been pressed. Could live somewhere else actually!
 };
 
+int Lua_SpawnEntity(lua_State* pLuaState);
+

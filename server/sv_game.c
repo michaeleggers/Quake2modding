@@ -325,13 +325,6 @@ Init the game subsystem for a new map
 */
 void SCR_DebugGraph (float value, int color);
 
-void CallLuaScript(const char* script_name)
-{
-	if (luaL_loadfile(pLuaState, script_name) || lua_pcall(pLuaState, 0, 0, 0)) {
-		Com_Printf("ERROR: %s!\n\n", lua_tostring(pLuaState, -1));
-	}
-}
-
 void SV_InitGameProgs (void)
 {
 	game_import_t	import;
@@ -395,7 +388,7 @@ void SV_InitGameProgs (void)
 	import.SetAreaPortalState = CM_SetAreaPortalState;
 	import.AreasConnected = CM_AreasConnected;
 
-	import.CallLuaScript = CallLuaScript;
+	import.SV_GetLuaState = SV_GetLuaState;
 
 	ge = (game_export_t *)Sys_GetGameAPI (&import);
 
