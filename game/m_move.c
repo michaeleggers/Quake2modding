@@ -506,6 +506,19 @@ qboolean SV_CloseEnough (edict_t *ent, edict_t *goal, float dist)
 	return true;
 }
 
+qboolean SV_CloseEnoughPos(edict_t* ent, vec3_t goal, float dist)
+{
+	int		i;
+
+	for (i = 0; i < 3; i++)
+	{
+		if (goal[i] > ent->absmax[i] + dist)
+			return false;
+		if (goal[i] < ent->absmin[i] - dist)
+			return false;
+	}
+	return true;
+}
 
 /*
 ======================

@@ -91,9 +91,36 @@ This replaces the QC functions: ai_forward, ai_back, ai_pain, and ai_painforward
 */
 void ai_move (edict_t *self, float dist)
 {
+	
+
 	M_walkmove (self, self->s.angles[YAW], dist);
 }
 
+void ai_script(edict_t* self, float dist)
+{
+	vec3_t v;
+	if (self->has_script_target)
+	{
+		self->script_running = true;
+		VectorSubtract(self->target_pos, self->s.origin, v);
+		Com_Printf("Executing script target...\n");
+		self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
+		self->monsterinfo.walk(self);
+		self->has_script_target = false;
+		//ai_move(self, VectorLength(v));
+	}
+	/*if (self->script_running) {
+		VectorSubtract(self->target_pos, self->s.origin, v);
+		Com_Printf("origin: %f, %f, %f\n", self->s.origin[0], self->s.origin[1], self->s.origin[2]);
+		float dist = VectorLength(v);
+		Com_Printf("length of v: %f\n", dist);
+		if (dist < 10.0) {
+			printf("Reached destination!\n");
+			self->monsterinfo.stand(self);
+			self->script_running = false;
+		}
+	}*/
+}
 
 /*
 =============
@@ -104,7 +131,19 @@ Distance is for slight position adjustments needed by the animations
 ==============
 */
 void ai_stand (edict_t *self, float dist)
-{
+{	
+	if (self->has_script_target) {
+		vec3_t v;
+		self->script_running = true;
+		VectorSubtract(self->target_pos, self->s.origin, v);
+		Com_Printf("Executing script target...\n");
+		self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);		
+		dist = VectorLength(v);
+		self->monsterinfo.walk(self);
+		//ai_walk (self, dist);
+		return;
+	}
+
 	vec3_t	v;
 
 	if (dist)
@@ -162,13 +201,22 @@ The monster is walking it's beat
 */
 void ai_walk (edict_t *self, float dist)
 {
+	if (self->script_running) {
+		if (SV_CloseEnoughPos(self, self->target_pos, dist)) {
+			self->script_running = false;
+			self->has_script_target = false;
+			self->monsterinfo.stand(self);
+			Com_Printf("%Reached script target pos!\n");
+		}		
+	}
+
 	M_MoveToGoal (self, dist);
 
 	// check for noticing a player
 	if (FindTarget (self))
 		return;
 
-	if ((self->monsterinfo.search) && (level.time > self->monsterinfo.idle_time))
+	else if ((self->monsterinfo.search) && (level.time > self->monsterinfo.idle_time))
 	{
 		if (self->monsterinfo.idle_time)
 		{
@@ -773,7 +821,7 @@ qboolean ai_checkattack (edict_t *self, float dist)
 	vec3_t		temp;
 	qboolean	hesDeadJim;
 
-// this causes monsters to run blindly to the combat point w/o firing
+	// this causes monsters to run blindly to the combat point w/o firing
 	if (self->goalentity)
 	{
 		if (self->monsterinfo.aiflags & AI_COMBAT_POINT)

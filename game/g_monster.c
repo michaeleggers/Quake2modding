@@ -454,7 +454,6 @@ void monster_use (edict_t *self, edict_t *other, edict_t *activator)
 }
 
 
-void monster_start_go (edict_t *self);
 
 
 void monster_triggered_spawn (edict_t *self)
@@ -633,30 +632,40 @@ void monster_start_go (edict_t *self)
 		}
 	}
 
+
+
 	if (self->target)
 	{
 		self->goalentity = self->movetarget = G_PickTarget(self->target);
 		if (!self->movetarget)
 		{
-			gi.dprintf ("%s can't find target %s at %s\n", self->classname, self->target, vtos(self->s.origin));
+			gi.dprintf("%s can't find target %s at %s\n", self->classname, self->target, vtos(self->s.origin));
 			self->target = NULL;
 			self->monsterinfo.pausetime = 100000000;
-			self->monsterinfo.stand (self);
+			self->monsterinfo.stand(self);
 		}
-		else if (strcmp (self->movetarget->classname, "path_corner") == 0)
+		else if (strcmp(self->movetarget->classname, "path_corner") == 0)
 		{
-			VectorSubtract (self->goalentity->s.origin, self->s.origin, v);
+			VectorSubtract(self->goalentity->s.origin, self->s.origin, v);
 			self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
-			self->monsterinfo.walk (self);
+			self->monsterinfo.walk(self);
 			self->target = NULL;
 		}
 		else
 		{
 			self->goalentity = self->movetarget = NULL;
 			self->monsterinfo.pausetime = 100000000;
-			self->monsterinfo.stand (self);
+			self->monsterinfo.stand(self);
 		}
 	}
+	//else if (self->has_script_target) {
+	//	vec3_t v;
+	//	Com_Printf("Executing script target...\n");
+	//	VectorSubtract(self->target_pos, self->s.origin, v);
+	//	self->ideal_yaw = self->s.angles[YAW] = vectoyaw(v);
+	//	self->monsterinfo.walk(self);		
+	//	self->has_script_target = false;
+	//}
 	else
 	{
 		self->monsterinfo.pausetime = 100000000;

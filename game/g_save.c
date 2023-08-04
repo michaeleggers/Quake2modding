@@ -231,6 +231,7 @@ void InitGame (void)
 	//Lua_Init();
 	pLuaState = gi.SV_GetLuaState();
 	lua_register(pLuaState, "SpawnEntity", Lua_SpawnEntity);
+	lua_register(pLuaState, "MoveEntity", Lua_MoveEntity);
 }
 
 //=========================================================

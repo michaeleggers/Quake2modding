@@ -1084,6 +1084,6 @@ void SV_Shutdown (char *finalmsg, qboolean reconnect)
 		fclose (svs.demofile);
 	memset (&svs, 0, sizeof(svs));
 
-	lua_close(pLuaState); // TODO(Michael): Maybe too early! Lua might still be useful in Sys_Quit or Sys_Error.
+	//lua_close(pLuaState); // TODO(Michael): Maybe too early! Lua might still be useful in Sys_Quit or Sys_Error.
 }
 

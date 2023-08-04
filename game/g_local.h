@@ -686,6 +686,7 @@ void monster_fire_bfg (edict_t *self, vec3_t start, vec3_t aimdir, int damage, i
 void M_droptofloor (edict_t *ent);
 void monster_think (edict_t *self);
 void walkmonster_start (edict_t *self);
+void monster_start_go(edict_t* self);
 void swimmonster_start (edict_t *self);
 void flymonster_start (edict_t *self);
 void AttackFinished (edict_t *self, float time);
@@ -709,6 +710,7 @@ void BecomeExplosion1(edict_t *self);
 void AI_SetSightClient (void);
 
 void ai_stand (edict_t *self, float dist);
+void ai_script(edict_t* self, float dist);
 void ai_move (edict_t *self, float dist);
 void ai_walk (edict_t *self, float dist);
 void ai_turn (edict_t *self, float dist);
@@ -1013,7 +1015,7 @@ struct edict_s
 	float		timestamp;
 
 	float		angle;			// set in qe3, -1 = up, -2 = down
-	char		*target;
+	char		*target;	
 	char		*targetname;
 	char		*killtarget;
 	char		*team;
@@ -1120,7 +1122,12 @@ struct edict_s
 	int				number;
 	vec3_t			number_sequence;
 	vec3_t          number_sequence_storage; // Remember what numbers have been pressed. Could live somewhere else actually!
+
+	qboolean		has_script_target;
+	qboolean		script_running;
+	vec3_t			target_pos;
 };
 
 int Lua_SpawnEntity(lua_State* pLuaState);
+int Lua_MoveEntity(lua_State* pLuaState);
 

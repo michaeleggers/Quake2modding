@@ -1850,8 +1850,10 @@ void ClientBeginServerFrame (edict_t *ent)
 int Lua_SpawnEntity(lua_State* pLuaState) {
 
 	// TODO(Michael): Use luaL_checknumber and checkstring(?)
-	luaL_checktype(pLuaState, 1, LUA_TSTRING);
-	const char* item_name = lua_tostring(pLuaState, 1);
+	//luaL_checktype(pLuaState, 1, LUA_TSTRING);
+	size_t entity_name_size = 0;
+	const char* entity_name = luaL_checkstring(pLuaState, 1, &entity_name_size);
+	//const char* item_name = lua_tostring(pLuaState, 1);
 	luaL_checktype(pLuaState, 2, LUA_TNUMBER);
 	double posX = lua_tonumber(pLuaState, 2);
 	luaL_checktype(pLuaState, 3, LUA_TNUMBER);
@@ -1859,13 +1861,28 @@ int Lua_SpawnEntity(lua_State* pLuaState) {
 	luaL_checktype(pLuaState, 4, LUA_TNUMBER);
 	double posZ = lua_tonumber(pLuaState, 4);
 
-	Com_Printf("SpawnEntity: %s, %f, %f, %f\n", item_name, posX, posY, posZ);
-	printf("SpawnEntity: %s at origin: (%f, %f, %f)\n", item_name, posX, posY, posZ);
+	Com_Printf("SpawnEntity: %s, %f, %f, %f\n", entity_name, posX, posY, posZ);
+	printf("SpawnEntity: %s at origin: (%f, %f, %f)\n", entity_name, posX, posY, posZ);
 	char entity_string[256] = { 0 };
-	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", item_name, posX, posY, posZ);
+	sprintf(entity_string, "\"classname\" \"%s\" \"origin\" \"%f %f %f\"}", entity_name, posX, posY, posZ);
 	edict_t* entity = SpawnEntity(entity_string);
 
 	lua_pushnumber(pLuaState, entity->s.number);
 
 	return 1;
+}
+
+int Lua_MoveEntity(lua_State* pLuaState) {
+	int linknumber = (int)luaL_checknumber(pLuaState, 1);
+	vec3_t target_pos;
+	target_pos[0] = luaL_checknumber(pLuaState, 2);
+	target_pos[1] = luaL_checknumber(pLuaState, 3);
+	target_pos[2] = luaL_checknumber(pLuaState, 4);
+	Com_Printf("Lua: Move entity to position: %f, %f, %f\n", target_pos[0], target_pos[1], target_pos[2]);
+	edict_t* ent = &g_edicts[linknumber];
+	ent->has_script_target = true;
+	VectorCopy(target_pos, ent->target_pos);
+	walkmonster_start(ent);
+
+	return 0;
 }
