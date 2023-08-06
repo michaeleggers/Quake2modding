@@ -207,10 +207,14 @@ void ai_walk (edict_t *self, float dist)
 			self->has_script_target = false;
 			self->monsterinfo.stand(self);
 			Com_Printf("%Reached script target pos!\n");
-		}		
+		}				
 	}
 
 	M_MoveToGoal (self, dist);
+
+	if (self->script_running && self->ai_state == AI_STATE_STOIC) { // early out if a script must finish before monster should respond to anything else
+		return;
+	}
 
 	// check for noticing a player
 	if (FindTarget (self))

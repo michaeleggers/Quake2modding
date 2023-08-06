@@ -966,6 +966,11 @@ struct gclient_s
 };
 
 
+typedef enum ai_state_e {
+	AI_STATE_NORMAL,
+	AI_STATE_STOIC
+} ai_state_e;
+
 struct edict_s
 {
 	entity_state_t	s;
@@ -1126,6 +1131,8 @@ struct edict_s
 	qboolean		has_script_target;
 	qboolean		script_running;
 	vec3_t			target_pos;
+
+	ai_state_e		ai_state;
 };
 
 int Lua_SpawnEntity(lua_State* pLuaState);

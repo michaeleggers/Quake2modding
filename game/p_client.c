@@ -1880,6 +1880,7 @@ int Lua_MoveEntity(lua_State* pLuaState) {
 	target_pos[2] = luaL_checknumber(pLuaState, 4);
 	Com_Printf("Lua: Move entity to position: %f, %f, %f\n", target_pos[0], target_pos[1], target_pos[2]);
 	edict_t* ent = &g_edicts[linknumber];
+	ent->ai_state = AI_STATE_STOIC;
 	ent->has_script_target = true;
 	VectorCopy(target_pos, ent->target_pos);
 	walkmonster_start(ent);
