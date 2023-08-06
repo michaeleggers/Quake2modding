@@ -215,8 +215,9 @@ qboolean SV_movestep (edict_t *ent, vec3_t move, qboolean relink)
 
 	trace = gi.trace (neworg, ent->mins, ent->maxs, end, ent, MASK_MONSTERSOLID);
 
-	if (trace.allsolid)
+	if (trace.allsolid) {
 		return false;
+	}
 
 	if (trace.startsolid)
 	{
@@ -538,8 +539,15 @@ void M_MoveToGoal (edict_t *ent, float dist)
 	if (ent->enemy &&  SV_CloseEnough (ent, ent->enemy, dist) )
 		return;
 
+	qboolean stepDirResult = SV_StepDirection(ent, ent->ideal_yaw, dist);
+	if (ent->script_running && !stepDirResult) { // TODO(Michael): Not sure if this is the right place to do this.
+		ent->script_running = false;
+		ent->has_script_target = false;
+		ent->monsterinfo.stand(ent);				
+	}
+
 // bump around...
-	if ( (rand()&3)==1 || !SV_StepDirection (ent, ent->ideal_yaw, dist))
+	if ( (rand()&3)==1 || !stepDirResult)
 	{
 		if (ent->inuse)
 			SV_NewChaseDir (ent, goal, dist);

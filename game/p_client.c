@@ -1873,14 +1873,23 @@ int Lua_SpawnEntity(lua_State* pLuaState) {
 }
 
 int Lua_MoveEntity(lua_State* pLuaState) {
+	const char* options = NULL;
+
 	int linknumber = (int)luaL_checknumber(pLuaState, 1);
 	vec3_t target_pos;
 	target_pos[0] = luaL_checknumber(pLuaState, 2);
 	target_pos[1] = luaL_checknumber(pLuaState, 3);
 	target_pos[2] = luaL_checknumber(pLuaState, 4);
-	Com_Printf("Lua: Move entity to position: %f, %f, %f\n", target_pos[0], target_pos[1], target_pos[2]);
 	edict_t* ent = &g_edicts[linknumber];
-	ent->ai_state = AI_STATE_STOIC;
+	ent->ai_state = AI_STATE_NORMAL;
+	int topOfStack = lua_gettop(pLuaState);
+	if (topOfStack == 5) {
+		const char* options = luaL_checkstring(pLuaState, 5);
+		if (!strcmp(options, "stoic")) {
+			ent->ai_state = AI_STATE_STOIC;
+		}
+	}
+	Com_Printf("Lua: Move entity to position: %f, %f, %f\n", target_pos[0], target_pos[1], target_pos[2]);
 	ent->has_script_target = true;
 	VectorCopy(target_pos, ent->target_pos);
 	walkmonster_start(ent);
