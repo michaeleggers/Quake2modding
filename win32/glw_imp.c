@@ -36,6 +36,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "glw_win.h"
 #include "winquake.h"
 
+#include <glfw3.h>
+
 static qboolean GLimp_SwitchFullscreen( int width, int height );
 qboolean GLimp_InitGL (void);
 
@@ -119,16 +121,17 @@ qboolean VID_CreateWindow( int width, int height, qboolean fullscreen )
 		y = vid_ypos->value;
 	}
 
-	glw_state.hWnd = CreateWindowEx (
-		 exstyle, 
-		 WINDOW_CLASS_NAME,
-		 "Quake 2",
-		 stylebits,
-		 x, y, w, h,
-		 NULL,
-		 NULL,
-		 glw_state.hInstance,
-		 NULL);
+
+	//glw_state.hWnd = CreateWindowEx (
+	//	 exstyle, 
+	//	 WINDOW_CLASS_NAME,
+	//	 "Quake 2",
+	//	 stylebits,
+	//	 x, y, w, h,
+	//	 NULL,
+	//	 NULL,
+	//	 glw_state.hInstance,
+	//	 NULL);
 
 	if (!glw_state.hWnd)
 		ri.Sys_Error (ERR_FATAL, "Couldn't create window");
@@ -173,11 +176,14 @@ rserr_t GLimp_SetMode( int *pwidth, int *pheight, int mode, qboolean fullscreen 
 
 	ri.Con_Printf( PRINT_ALL, " %d %d %s\n", width, height, win_fs[fullscreen] );
 
-	// destroy the existing window
-	if (glw_state.hWnd)
-	{
-		GLimp_Shutdown ();
-	}
+	// NOTE(Michael) : I think they used this existing window for the dummy context to load the OpenGL function pointers
+	// or something like that. We did all of that already using GLFW though...
+
+	// destroy the existing window 
+	//if (glw_state.hWnd)
+	//{
+	//	GLimp_Shutdown ();
+	//}
 
 	// do a CDS if needed
 	if ( fullscreen )
@@ -389,6 +395,10 @@ qboolean GLimp_Init( void *hinstance, void *wndproc )
 
 qboolean GLimp_InitGL (void)
 {
+	// NOTE(Michael): Also, this is done by GLFW for us.
+
+	return true;
+
     PIXELFORMATDESCRIPTOR pfd = 
 	{
 		sizeof(PIXELFORMATDESCRIPTOR),	// size of this pfd

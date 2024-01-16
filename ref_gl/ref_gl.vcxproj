@@ -222,7 +222,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\..\debug\ref_gl.dll</OutputFile>
       <ImportLibrary>.\..\debug\ref_gl.lib</ImportLibrary>
-      <AdditionalDependencies>winmm.lib;glfw3_mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;glfw3_mt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>.\ref_gl.def</ModuleDefinitionFile>
       <AdditionalLibraryDirectories>C:\repos\Quake2modding\ref_gl\lib\glfw3debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
