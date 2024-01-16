@@ -122,16 +122,16 @@ qboolean VID_CreateWindow( int width, int height, qboolean fullscreen )
 	}
 
 
-	//glw_state.hWnd = CreateWindowEx (
-	//	 exstyle, 
-	//	 WINDOW_CLASS_NAME,
-	//	 "Quake 2",
-	//	 stylebits,
-	//	 x, y, w, h,
-	//	 NULL,
-	//	 NULL,
-	//	 glw_state.hInstance,
-	//	 NULL);
+	glw_state.hWnd = CreateWindowEx (
+		 exstyle, 
+		 WINDOW_CLASS_NAME,
+		 "Quake 2",
+		 stylebits,
+		 x, y, w, h,
+		 NULL,
+		 NULL,
+		 glw_state.hInstance,
+		 NULL);
 
 	if (!glw_state.hWnd)
 		ri.Sys_Error (ERR_FATAL, "Couldn't create window");
