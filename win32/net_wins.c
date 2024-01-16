@@ -351,7 +351,7 @@ qboolean	NET_GetPacket (netsrc_t sock, netadr_t *net_from, sizebuf_t *net_messag
 			continue;
 
 		fromlen = sizeof(from);
-		ret = recvfrom (net_socket, net_message->data, net_message->maxsize
+		ret = recvfrom (net_socket, (char*)net_message->data, net_message->maxsize
 			, 0, (struct sockaddr *)&from, &fromlen);
 		if (ret == -1)
 		{
@@ -424,7 +424,7 @@ void NET_SendPacket (netsrc_t sock, int length, void *data, netadr_t to)
 
 	NetadrToSockadr (&to, &addr);
 
-	ret = sendto (net_socket, data, length, 0, &addr, sizeof(addr) );
+	ret = sendto (net_socket, (char*)data, length, 0, &addr, sizeof(addr) );
 	if (ret == -1)
 	{
 		int err = WSAGetLastError();
@@ -481,7 +481,7 @@ int NET_IPSocket (char *net_interface, int port)
 	}
 
 	// make it non-blocking
-	if (ioctlsocket (newsocket, FIONBIO, &_true) == -1)
+	if (ioctlsocket (newsocket, FIONBIO, (u_long*)&_true) == -1)
 	{
 		Com_Printf ("WARNING: UDP_OpenSocket: ioctl FIONBIO: %s\n", NET_ErrorString());
 		return 0;
@@ -506,7 +506,7 @@ int NET_IPSocket (char *net_interface, int port)
 
 	address.sin_family = AF_INET;
 
-	if( bind (newsocket, (void *)&address, sizeof(address)) == -1)
+	if( bind (newsocket, (sockaddr *)&address, sizeof(address)) == -1)
 	{
 		Com_Printf ("WARNING: UDP_OpenSocket: bind: %s\n", NET_ErrorString());
 		closesocket (newsocket);
@@ -590,7 +590,7 @@ int NET_IPXSocket (int port)
 	}
 
 	// make it non-blocking
-	if (ioctlsocket (newsocket, FIONBIO, &_true) == -1)
+	if (ioctlsocket (newsocket, FIONBIO, (u_long*)&_true) == -1)
 	{
 		Com_Printf ("WARNING: IPX_Socket: ioctl FIONBIO: %s\n", NET_ErrorString());
 		return 0;
@@ -611,7 +611,7 @@ int NET_IPXSocket (int port)
 	else
 		address.sa_socket = htons((short)port);
 
-	if( bind (newsocket, (void *)&address, sizeof(address)) == -1)
+	if( bind (newsocket, (sockaddr *)&address, sizeof(address)) == -1)
 	{
 		Com_Printf ("WARNING: IPX_Socket: bind: %s\n", NET_ErrorString());
 		closesocket (newsocket);

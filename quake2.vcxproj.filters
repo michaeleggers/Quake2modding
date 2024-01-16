@@ -159,6 +159,9 @@
     <ClCompile Include="client\x86.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="qcommon\MichiTestClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\anorms.h">
@@ -219,6 +222,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="win32\winquake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="qcommon\MichiTestClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

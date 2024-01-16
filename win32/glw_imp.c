@@ -48,7 +48,7 @@ static qboolean VerifyDriver( void )
 {
 	char buffer[1024];
 
-	strcpy( buffer, qglGetString( GL_RENDERER ) );
+	strcpy( buffer, (char*)qglGetString( GL_RENDERER ) );
 	strlwr( buffer );
 	if ( strcmp( buffer, "gdi generic" ) == 0 )
 		if ( !glw_state.mcd_accelerated )
@@ -78,7 +78,7 @@ qboolean VID_CreateWindow( int width, int height, qboolean fullscreen )
     wc.hInstance     = glw_state.hInstance;
     wc.hIcon         = 0;
     wc.hCursor       = LoadCursor (NULL,IDC_ARROW);
-	wc.hbrBackground = (void *)COLOR_GRAYTEXT;
+	wc.hbrBackground = (HBRUSH)COLOR_GRAYTEXT;
     wc.lpszMenuName  = 0;
     wc.lpszClassName = WINDOW_CLASS_NAME;
 

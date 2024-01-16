@@ -146,7 +146,7 @@ const char *Default_MenuKey( menuframework_s *m, int key )
 
 	if ( m )
 	{
-		if ( ( item = Menu_ItemAtCursor( m ) ) != 0 )
+		if ( ( item = (menucommon_s*)Menu_ItemAtCursor( m ) ) != 0 )
 		{
 			if ( item->type == MTYPE_FIELD )
 			{
@@ -1193,30 +1193,30 @@ static void UpdateSoundQualityFunc( void *unused )
 
 void Options_MenuInit( void )
 {
-	static const char *cd_music_items[] =
+	static char *cd_music_items[] =
 	{
 		"disabled",
 		"enabled",
 		0
 	};
-	static const char *quality_items[] =
+	static char *quality_items[] =
 	{
 		"low", "high", 0
 	};
 
-	static const char *compatibility_items[] =
+	static char *compatibility_items[] =
 	{
 		"max compatibility", "max performance", 0
 	};
 
-	static const char *yesno_names[] =
+	static char *yesno_names[] =
 	{
 		"no",
 		"yes",
 		0
 	};
 
-	static const char *crosshair_names[] =
+	static char *crosshair_names[] =
 	{
 		"none",
 		"cross",
@@ -1408,10 +1408,10 @@ END GAME MENU
 =============================================================================
 */
 static int credits_start_time;
-static const char **credits;
+static char **credits;
 static char *creditsIndex[256];
 static char *creditsBuffer;
-static const char *idcredits[] =
+static char *idcredits[] =
 {
 	"+QUAKE II BY ID SOFTWARE",
 	"",
@@ -1502,7 +1502,7 @@ static const char *idcredits[] =
 	0
 };
 
-static const char *xatcredits[] =
+static char *xatcredits[] =
 {
 	"+QUAKE II MISSION PACK: THE RECKONING",
 	"+BY",
@@ -1643,7 +1643,7 @@ static const char *xatcredits[] =
 	0
 };
 
-static const char *roguecredits[] =
+static char *roguecredits[] =
 {
 	"+QUAKE II MISSION PACK 2: GROUND ZERO",
 	"+BY",
@@ -1826,7 +1826,7 @@ void M_Menu_Credits_f( void )
 	int		isdeveloper = 0;
 
 	creditsBuffer = NULL;
-	count = FS_LoadFile ("credits", &creditsBuffer);
+	count = FS_LoadFile ("credits", (void**)&creditsBuffer);
 	if (count != -1)
 	{
 		p = creditsBuffer;
@@ -2136,7 +2136,7 @@ SAVEGAME MENU
 
 =============================================================================
 */
-static menuframework_s	s_savegame_menu;
+// static menuframework_s	s_savegame_menu; // TODO(Michael): Uncommented because already defined above. Will this cause issues?
 static menuaction_s		s_savegame_actions[MAX_SAVEGAMES];
 
 void SaveGameCallback( void *self )
@@ -2506,7 +2506,7 @@ void StartServerActionFunc( void *self )
 
 void StartServer_MenuInit( void )
 {
-	static const char *dm_coop_names[] =
+	static char *dm_coop_names[] =
 	{
 		"deathmatch",
 		"cooperative",
@@ -2514,7 +2514,7 @@ void StartServer_MenuInit( void )
 	};
 //=======
 //PGM
-	static const char *dm_coop_names_rogue[] =
+	static char *dm_coop_names_rogue[] =
 	{
 		"deathmatch",
 		"cooperative",
@@ -2549,7 +2549,7 @@ void StartServer_MenuInit( void )
 		length = ftell(fp);
 		fseek(fp, 0, SEEK_SET);
 #endif
-		buffer = malloc( length );
+		buffer = (char*)malloc( length );
 		fread( buffer, length, 1, fp );
 	}
 
@@ -2566,7 +2566,7 @@ void StartServer_MenuInit( void )
 	if ( nummaps == 0 )
 		Com_Error( ERR_DROP, "no maps in maps.lst\n" );
 
-	mapnames = malloc( sizeof( char * ) * ( nummaps + 1 ) );
+	mapnames = (char**)malloc( sizeof( char * ) * ( nummaps + 1 ) );
 	memset( mapnames, 0, sizeof( char * ) * ( nummaps + 1 ) );
 
 	s = buffer;
@@ -2585,7 +2585,7 @@ void StartServer_MenuInit( void )
 		strcpy( longname, COM_Parse( &s ) );
 		Com_sprintf( scratch, sizeof( scratch ), "%s\n%s", longname, shortname );
 
-		mapnames[i] = malloc( strlen( scratch ) + 1 );
+		mapnames[i] = (char*)malloc( strlen( scratch ) + 1 );
 		strcpy( mapnames[i], scratch );
 	}
 	mapnames[nummaps] = 0;
@@ -2918,11 +2918,11 @@ setvalue:
 
 void DMOptions_MenuInit( void )
 {
-	static const char *yes_no_names[] =
+	static char *yes_no_names[] =
 	{
 		"no", "yes", 0
 	};
-	static const char *teamplay_names[] = 
+	static char *teamplay_names[] = 
 	{
 		"disabled", "by skin", "by model", 0
 	};
@@ -3190,7 +3190,7 @@ static void DownloadCallback( void *self )
 
 void DownloadOptions_MenuInit( void )
 {
-	static const char *yes_no_names[] =
+	static char *yes_no_names[] =
 	{
 		"no", "yes", 0
 	};
@@ -3381,7 +3381,7 @@ static char *s_pmnames[MAX_PLAYERMODELS];
 static int s_numplayermodels;
 
 static int rate_tbl[] = { 2500, 3200, 5000, 10000, 25000, 0 };
-static const char *rate_names[] = { "28.8 Modem", "33.6 Modem", "Single ISDN",
+static char *rate_names[] = { "28.8 Modem", "33.6 Modem", "Single ISDN",
 	"Dual ISDN/Cable", "T1/LAN", "User defined", 0 };
 
 void DownloadOptionsFunc( void *self )
@@ -3524,7 +3524,7 @@ static qboolean PlayerConfig_ScanDirectories( void )
 		if ( !nskins )
 			continue;
 
-		skinnames = malloc( sizeof( char * ) * ( nskins + 1 ) );
+		skinnames = (char**)malloc( sizeof( char * ) * ( nskins + 1 ) );
 		memset( skinnames, 0, sizeof( char * ) * ( nskins + 1 ) );
 
 		// copy the valid skins
@@ -3615,7 +3615,7 @@ qboolean PlayerConfig_MenuInit( void )
 
 	cvar_t *hand = Cvar_Get( "hand", "0", CVAR_USERINFO | CVAR_ARCHIVE );
 
-	static const char *handedness[] = { "right", "left", "center", 0 };
+	static char *handedness[] = { "right", "left", "center", 0 };
 
 	PlayerConfig_ScanDirectories();
 

@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "server.h"
 
+#include "../qcommon/MichiTestClass.h"
+
 netadr_t	master_adr[MAX_MASTERS];	// address of group servers
 
 client_t	*sv_client;			// current client
@@ -759,6 +761,8 @@ SV_Frame
 */
 void SV_Frame (int msec)
 {
+	
+
 	time_before_game = time_after_game = 0;
 
 	// if server is not active, do nothing

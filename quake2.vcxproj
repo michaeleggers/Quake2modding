@@ -151,6 +151,7 @@
       <PrecompiledHeaderOutputFile>.\debug\quake2.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\debug\</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -191,6 +192,7 @@
       <PrecompiledHeaderOutputFile>.\release\quake2.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\release\</ObjectFileName>
       <ProgramDataBaseFileName>.\release\</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -374,6 +376,7 @@
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd /QAieee1   /QA21164 /MTd /QAieee1 </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164 /QAieee1   /QA21164 /QAieee1 </AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="qcommon\MichiTestClass.cpp" />
     <ClCompile Include="qcommon\net_chan.c">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd /QAieee1   /QA21164 /MTd /QAieee1 </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164 /QAieee1   /QA21164 /QAieee1 </AdditionalOptions>
@@ -467,6 +470,7 @@
     <ClInclude Include="game\game.h" />
     <ClInclude Include="game\q_shared.h" />
     <ClInclude Include="qcommon\bspfile.h" />
+    <ClInclude Include="qcommon\MichiTestClass.h" />
     <ClInclude Include="qcommon\qcommon.h" />
     <ClInclude Include="qcommon\qfiles.h" />
     <ClInclude Include="server\server.h" />

@@ -383,7 +383,7 @@ mframe_t infantry_frames_death3 [] =
 mmove_t infantry_move_death3 = {FRAME_death301, FRAME_death309, infantry_frames_death3, infantry_dead};
 
 
-void infantry_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
+void infantry_die(edict_t* self, edict_t* inflictor, edict_t* attacker, int damage, vec3_t point)
 {
 	int		n;
 

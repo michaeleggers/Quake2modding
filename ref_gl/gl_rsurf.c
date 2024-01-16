@@ -547,7 +547,7 @@ dynamic:
 			smax = (fa->extents[0]>>4)+1;
 			tmax = (fa->extents[1]>>4)+1;
 
-			R_BuildLightMap( fa, (void *)temp, smax*4 );
+			R_BuildLightMap( fa, (byte *)temp, smax*4 );
 			R_SetCacheState( fa );
 
 			GL_Bind( gl_state.lightmap_textures + fa->lightmaptexturenum );
@@ -736,7 +736,7 @@ dynamic:
 			smax = (surf->extents[0]>>4)+1;
 			tmax = (surf->extents[1]>>4)+1;
 
-			R_BuildLightMap( surf, (void *)temp, smax*4 );
+			R_BuildLightMap( surf, (byte *)temp, smax*4 );
 			R_SetCacheState( surf );
 
 			GL_MBind( GL_TEXTURE1_SGIS, gl_state.lightmap_textures + surf->lightmaptexturenum );
@@ -755,7 +755,7 @@ dynamic:
 			smax = (surf->extents[0]>>4)+1;
 			tmax = (surf->extents[1]>>4)+1;
 
-			R_BuildLightMap( surf, (void *)temp, smax*4 );
+			R_BuildLightMap( surf, (byte *)temp, smax*4 );
 
 			GL_MBind( GL_TEXTURE1_SGIS, gl_state.lightmap_textures + 0 );
 
@@ -1463,7 +1463,7 @@ void GL_BuildPolygonFromSurface(msurface_t *fa)
 	//
 	// draw texture
 	//
-	poly = Hunk_Alloc (sizeof(glpoly_t) + (lnumverts-4) * VERTEXSIZE*sizeof(float));
+	poly = (glpoly_t*)Hunk_Alloc (sizeof(glpoly_t) + (lnumverts-4) * VERTEXSIZE*sizeof(float));
 	poly->next = fa->polys;
 	poly->flags = fa->flags;
 	fa->polys = poly;

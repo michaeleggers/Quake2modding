@@ -208,7 +208,7 @@ static void CancelChanges( void *unused )
 */
 void VID_MenuInit( void )
 {
-	static const char *resolutions[] = 
+	static char *resolutions[] = 
 	{
 		"[320 240  ]",
 		"[400 300  ]",
@@ -222,7 +222,7 @@ void VID_MenuInit( void )
 		"[1600 1200]",
 		0
 	};
-	static const char *refs[] =
+	static char *refs[] =
 	{
 		"[software      ]",
 		"[default OpenGL]",
@@ -231,7 +231,7 @@ void VID_MenuInit( void )
 //		"[Rendition OpenGL]",
 		0
 	};
-	static const char *yesno_names[] =
+	static char *yesno_names[] =
 	{
 		"no",
 		"yes",

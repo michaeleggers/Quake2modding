@@ -154,6 +154,7 @@
       <PrecompiledHeaderOutputFile>.\release\game.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\release\</ObjectFileName>
       <ProgramDataBaseFileName>.\release\</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -242,6 +243,7 @@
       <PrecompiledHeaderOutputFile>.\debug\game.pch</PrecompiledHeaderOutputFile>
       <ObjectFileName>.\debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\debug\</ProgramDataBaseFileName>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>

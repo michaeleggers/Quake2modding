@@ -39,7 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 qboolean s_win95;
 
 int			starttime;
-int			ActiveApp;
+qboolean	ActiveApp;
 qboolean	Minimized;
 
 static HANDLE		hinput, houtput;
@@ -119,7 +119,7 @@ void WinError (void)
 	);
 
 	// Display the string.
-	MessageBox( NULL, lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
+	MessageBox( NULL, (LPCSTR)lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
 
 	// Free the buffer.
 	LocalFree( lpMsgBuf );
@@ -274,13 +274,13 @@ char *Sys_ConsoleInput (void)
 
 	for ( ;; )
 	{
-		if (!GetNumberOfConsoleInputEvents (hinput, &numevents))
+		if (!GetNumberOfConsoleInputEvents (hinput, (LPDWORD)&numevents))
 			Sys_Error ("Error getting # of console events");
 
 		if (numevents <= 0)
 			break;
 
-		if (!ReadConsoleInput(hinput, recs, 1, &numread))
+		if (!ReadConsoleInput(hinput, recs, 1, (LPDWORD)&numread))
 			Sys_Error ("Error reading console input");
 
 		if (numread != 1)
@@ -295,7 +295,7 @@ char *Sys_ConsoleInput (void)
 				switch (ch)
 				{
 					case '\r':
-						WriteFile(houtput, "\r\n", 2, &dummy, NULL);	
+						WriteFile(houtput, "\r\n", 2, (LPDWORD)&dummy, NULL);	
 
 						if (console_textlen)
 						{
@@ -309,7 +309,7 @@ char *Sys_ConsoleInput (void)
 						if (console_textlen)
 						{
 							console_textlen--;
-							WriteFile(houtput, "\b \b", 3, &dummy, NULL);	
+							WriteFile(houtput, "\b \b", 3, (LPDWORD)&dummy, NULL);
 						}
 						break;
 
@@ -318,7 +318,7 @@ char *Sys_ConsoleInput (void)
 						{
 							if (console_textlen < sizeof(console_text)-2)
 							{
-								WriteFile(houtput, &ch, 1, &dummy, NULL);	
+								WriteFile(houtput, &ch, 1, (LPDWORD)&dummy, NULL);
 								console_text[console_textlen] = ch;
 								console_textlen++;
 							}
@@ -356,13 +356,13 @@ void Sys_ConsoleOutput (char *string)
 		memset(&text[1], ' ', console_textlen);
 		text[console_textlen+1] = '\r';
 		text[console_textlen+2] = 0;
-		WriteFile(houtput, text, console_textlen+2, &dummy, NULL);
+		WriteFile(houtput, text, console_textlen+2, (LPDWORD)&dummy, NULL);
 	}
 
-	WriteFile(houtput, string, strlen(string), &dummy, NULL);
+	WriteFile(houtput, string, strlen(string), (LPDWORD)&dummy, NULL);
 
 	if (console_textlen)
-		WriteFile(houtput, console_text, console_textlen, &dummy, NULL);
+		WriteFile(houtput, console_text, console_textlen, (LPDWORD)&dummy, NULL);
 }
 
 
@@ -409,9 +409,9 @@ char *Sys_GetClipboardData( void )
 
 		if ( ( hClipboardData = GetClipboardData( CF_TEXT ) ) != 0 )
 		{
-			if ( ( cliptext = GlobalLock( hClipboardData ) ) != 0 ) 
+			if ( ( cliptext = (char*)GlobalLock( hClipboardData ) ) != 0 ) 
 			{
-				data = malloc( GlobalSize( hClipboardData ) + 1 );
+				data = (char*)malloc( GlobalSize( hClipboardData ) + 1 );
 				strcpy( data, cliptext );
 				GlobalUnlock( hClipboardData );
 			}
@@ -462,6 +462,9 @@ void Sys_UnloadGame (void)
 	game_library = NULL;
 }
 
+
+typedef void* (*GetGameAPIFPN) (void*);
+
 /*
 =================
 Sys_GetGameAPI
@@ -471,7 +474,7 @@ Loads the game dll
 */
 void *Sys_GetGameAPI (void *parms)
 {
-	void	*(*GetGameAPI) (void *);
+	GetGameAPIFPN GetGameAPI;
 	char	name[MAX_OSPATH];
 	char	*path;
 	char	cwd[MAX_OSPATH];
@@ -535,7 +538,7 @@ void *Sys_GetGameAPI (void *parms)
 		}
 	}
 
-	GetGameAPI = (void *)GetProcAddress (game_library, "GetGameAPI");
+	GetGameAPI = (GetGameAPIFPN)GetProcAddress (game_library, "GetGameAPI");
 	if (!GetGameAPI)
 	{
 		Sys_UnloadGame ();		

@@ -66,7 +66,9 @@ CLIENT / SERVER interactions
 static int	rd_target;
 static char	*rd_buffer;
 static int	rd_buffersize;
-static void	(*rd_flush)(int target, char *buffer);
+typedef void	(*rd_flushfpn)(int target, char* buffer);
+static rd_flushfpn rd_flush;
+//static void	(*rd_flush)(int target, char *buffer);
 
 void Com_BeginRedirect (int target, char *buffer, int buffersize, void (*flush))
 {
@@ -75,7 +77,7 @@ void Com_BeginRedirect (int target, char *buffer, int buffersize, void (*flush))
 	rd_target = target;
 	rd_buffer = buffer;
 	rd_buffersize = buffersize;
-	rd_flush = flush;
+	rd_flush = (rd_flushfpn)flush;
 
 	*rd_buffer = 0;
 }
@@ -287,7 +289,7 @@ void MSG_WriteChar (sizebuf_t *sb, int c)
 		Com_Error (ERR_FATAL, "MSG_WriteChar: range error");
 #endif
 
-	buf = SZ_GetSpace (sb, 1);
+	buf = (byte*)SZ_GetSpace (sb, 1);
 	buf[0] = c;
 }
 
@@ -300,7 +302,7 @@ void MSG_WriteByte (sizebuf_t *sb, int c)
 		Com_Error (ERR_FATAL, "MSG_WriteByte: range error");
 #endif
 
-	buf = SZ_GetSpace (sb, 1);
+	buf = (byte*)SZ_GetSpace (sb, 1);
 	buf[0] = c;
 }
 
@@ -313,7 +315,7 @@ void MSG_WriteShort (sizebuf_t *sb, int c)
 		Com_Error (ERR_FATAL, "MSG_WriteShort: range error");
 #endif
 
-	buf = SZ_GetSpace (sb, 2);
+	buf = (byte*)SZ_GetSpace (sb, 2);
 	buf[0] = c&0xff;
 	buf[1] = c>>8;
 }
@@ -322,7 +324,7 @@ void MSG_WriteLong (sizebuf_t *sb, int c)
 {
 	byte	*buf;
 	
-	buf = SZ_GetSpace (sb, 4);
+	buf = (byte*)SZ_GetSpace (sb, 4);
 	buf[0] = c&0xff;
 	buf[1] = (c>>8)&0xff;
 	buf[2] = (c>>16)&0xff;
@@ -1030,7 +1032,7 @@ char *CopyString (char *in)
 {
 	char	*out;
 	
-	out = Z_Malloc (strlen(in)+1);
+	out = (char*)Z_Malloc (strlen(in)+1);
 	strcpy (out, in);
 	return out;
 }
@@ -1165,7 +1167,7 @@ void *Z_TagMalloc (int size, int tag)
 	zhead_t	*z;
 	
 	size = size + sizeof(zhead_t);
-	z = malloc(size);
+	z = (zhead_t*)malloc(size);
 	if (!z)
 		Com_Error (ERR_FATAL, "Z_Malloc: failed on allocation of %i bytes",size);
 	memset (z, 0, size);

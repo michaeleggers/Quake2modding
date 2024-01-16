@@ -107,7 +107,7 @@ typedef struct
 
 	int curvalue;
 
-	const char **itemnames;
+	char **itemnames;
 } menulist_s;
 
 typedef struct

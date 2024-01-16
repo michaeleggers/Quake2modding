@@ -133,7 +133,7 @@ void Field_Draw( menufield_s *f )
 
 qboolean Field_Key( menufield_s *f, int key )
 {
-	extern int keydown[];
+	extern qboolean keydown[];
 
 	switch ( key )
 	{
@@ -293,7 +293,7 @@ void Menu_AdjustCursor( menuframework_s *m, int dir )
 	*/
 	if ( m->cursor >= 0 && m->cursor < m->nitems )
 	{
-		if ( ( citem = Menu_ItemAtCursor( m ) ) != 0 )
+		if ( ( citem = (menucommon_s*)Menu_ItemAtCursor( m ) ) != 0 )
 		{
 			if ( citem->type != MTYPE_SEPARATOR )
 				return;
@@ -308,7 +308,7 @@ void Menu_AdjustCursor( menuframework_s *m, int dir )
 	{
 		while ( 1 )
 		{
-			citem = Menu_ItemAtCursor( m );
+			citem = (menucommon_s*)Menu_ItemAtCursor( m );
 			if ( citem )
 				if ( citem->type != MTYPE_SEPARATOR )
 					break;
@@ -321,7 +321,7 @@ void Menu_AdjustCursor( menuframework_s *m, int dir )
 	{
 		while ( 1 )
 		{
-			citem = Menu_ItemAtCursor( m );
+			citem = (menucommon_s*)Menu_ItemAtCursor( m );
 			if ( citem )
 				if ( citem->type != MTYPE_SEPARATOR )
 					break;
@@ -375,7 +375,7 @@ void Menu_Draw( menuframework_s *menu )
 		}
 	}
 
-	item = Menu_ItemAtCursor( menu );
+	item = (menucommon_s*)Menu_ItemAtCursor( menu );
 
 	if ( item && item->cursordraw )
 	{
@@ -536,7 +536,7 @@ int Menu_TallySlots( menuframework_s *menu )
 		if ( ( ( menucommon_s * ) menu->items[i] )->type == MTYPE_LIST )
 		{
 			int nitems = 0;
-			const char **n = ( ( menulist_s * ) menu->items[i] )->itemnames;
+			char **n = ( ( menulist_s * ) menu->items[i] )->itemnames;
 
 			while (*n)
 				nitems++, n++;
@@ -566,7 +566,7 @@ void Menulist_DoEnter( menulist_s *l )
 
 void MenuList_Draw( menulist_s *l )
 {
-	const char **n;
+	char **n;
 	int y = 0;
 
 	Menu_DrawStringR2LDark( l->generic.x + l->generic.parent->x + LCOLUMN_OFFSET, l->generic.y + l->generic.parent->y, l->generic.name );

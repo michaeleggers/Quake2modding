@@ -328,7 +328,7 @@ char *ED_NewString (char *string)
 	
 	l = strlen(string) + 1;
 
-	newb = gi.TagMalloc (l, TAG_LEVEL);
+	newb = (char*)gi.TagMalloc (l, TAG_LEVEL);
 
 	new_p = newb;
 
