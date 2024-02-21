@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <float.h>
 #include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define GLFW_EXPOSE_NATIVE_WGL
@@ -3035,7 +3036,7 @@ void QGL_Shutdown( void )
 ** might be.
 ** 
 */
-qboolean QGL_Init( const char *dllname )
+qboolean QGL_Init( const char *dllname, GLFWwindow* window )
 {
 	// update 3Dfx gamma irrespective of underlying DLL
 	{
@@ -3060,32 +3061,10 @@ qboolean QGL_Init( const char *dllname )
 	}
 	gl_config.allow_cds = true;
 
-	if (!glfwInit()) {
-		printf("GLFW failed to initialize.\n");
-		return false;
-	}
-
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-
-	GLFWwindow* window = glfwCreateWindow(800, 600, "GLFW Quake2", NULL, NULL);
-	if (window == NULL)
-	{
-		printf("Failed to create GLFW window\n");
-		glfwTerminate();
-		return false;
-	}
-	glfwMakeContextCurrent(window);
 	glw_state.hWnd = glfwGetWin32Window(window);
 	glw_state.hDC = GetDC(glfwGetWin32Window(window));
 	glw_state.hGLRC = glfwGetWGLContext(window);
-
-	
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		printf("Failed to init GLAD\n");
-		return false;
-	}
+	glw_state.glfwWindow = window;
 
 	qglAccum = dllAccum = glAccum;
 	qglAlphaFunc                 = dllAlphaFunc = glAlphaFunc;

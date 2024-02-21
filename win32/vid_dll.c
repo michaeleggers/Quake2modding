@@ -23,6 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <assert.h>
 #include <float.h>
 
+#define GLFW_INCLUDE_NONE
+#include <glfw3.h>
+
 #include "..\client\client.h"
 #include "winquake.h"
 //#include "zmouse.h"
@@ -51,6 +54,7 @@ HINSTANCE	reflib_library;		// Handle to refresh DLL
 qboolean	reflib_active = 0;
 
 HWND        cl_hwnd;            // Main window handle for life of program
+GLFWwindow* cl_glfwWindow;
 
 #define VID_NUM_MODES ( sizeof( vid_modes ) / sizeof( vid_modes[0] ) )
 
@@ -328,7 +332,7 @@ LONG WINAPI MainWndProc (
 		return 0;
 
 	case WM_CREATE:
-		cl_hwnd = hWnd;
+		cl_hwnd = hWnd;		
 
 		MSH_MOUSEWHEEL = RegisterWindowMessage("MSWHEEL_ROLLMSG"); 
         return DefWindowProc (hWnd, uMsg, wParam, lParam);

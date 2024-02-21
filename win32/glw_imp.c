@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "glw_win.h"
 #include "winquake.h"
 
+#define GLFW_INCLUDE_NONE 
 #include <glfw3.h>
 
 static qboolean GLimp_SwitchFullscreen( int width, int height );
@@ -57,6 +58,11 @@ static qboolean VerifyDriver( void )
 			return false;
 	return true;
 }
+
+void GLFWwindowPosCB(GLFWwindow* window, int xpos, int ypos) {
+
+}
+
 
 /*
 ** VID_CreateWindow
@@ -84,8 +90,10 @@ qboolean VID_CreateWindow( int width, int height, qboolean fullscreen )
     wc.lpszMenuName  = 0;
     wc.lpszClassName = WINDOW_CLASS_NAME;
 
-    if (!RegisterClass (&wc) )
-		ri.Sys_Error (ERR_FATAL, "Couldn't register window class");
+  //  if (!RegisterClass (&wc) )
+		//ri.Sys_Error (ERR_FATAL, "Couldn't register window class");
+
+	glfwSetWindowUserPointer(glw_state.glfwWindow, (void*)glw_state.wndproc);
 
 	if (fullscreen)
 	{
@@ -122,16 +130,16 @@ qboolean VID_CreateWindow( int width, int height, qboolean fullscreen )
 	}
 
 
-	glw_state.hWnd = CreateWindowEx (
-		 exstyle, 
-		 WINDOW_CLASS_NAME,
-		 "Quake 2",
-		 stylebits,
-		 x, y, w, h,
-		 NULL,
-		 NULL,
-		 glw_state.hInstance,
-		 NULL);
+	//glw_state.hWnd = CreateWindowEx (
+	//	 exstyle, 
+	//	 WINDOW_CLASS_NAME,
+	//	 "Quake 2",
+	//	 stylebits,
+	//	 x, y, w, h,
+	//	 NULL,
+	//	 NULL,
+	//	 glw_state.hInstance,
+	//	 NULL);
 
 	if (!glw_state.hWnd)
 		ri.Sys_Error (ERR_FATAL, "Couldn't create window");

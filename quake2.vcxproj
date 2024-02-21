@@ -110,6 +110,7 @@
       <ObjectFileName>.\DebugAxp\</ObjectFileName>
       <ProgramDataBaseFileName>.\DebugAxp\</ProgramDataBaseFileName>
       <AdditionalOptions> /QA21164 /MTd /QAieee1 </AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\repos\Quake2modding\ref_gl\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -152,6 +153,7 @@
       <ObjectFileName>.\debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\debug\</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>C:\repos\Quake2modding\ref_gl\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -193,6 +195,7 @@
       <ObjectFileName>.\release\</ObjectFileName>
       <ProgramDataBaseFileName>.\release\</ProgramDataBaseFileName>
       <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>C:\repos\Quake2modding\ref_gl\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -233,6 +236,7 @@
       <ObjectFileName>.\ReleaseAXP\</ObjectFileName>
       <ProgramDataBaseFileName>.\ReleaseAXP\</ProgramDataBaseFileName>
       <AdditionalOptions> /QA21164 /QAieee1 </AdditionalOptions>
+      <AdditionalIncludeDirectories>C:\repos\Quake2modding\ref_gl\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -258,6 +262,11 @@
       <AdditionalDependencies>winmm.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\repos\Quake2modding\ref_gl\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="client\cl_cin.c">

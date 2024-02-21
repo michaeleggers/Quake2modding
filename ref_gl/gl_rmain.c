@@ -18,9 +18,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 // r_main.c
+
+#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
+#include <glfw3.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+#include <glfw3native.h>
+
 #include "gl_local.h"
 
 void R_Clear (void);
+
+GLFWwindow* r_glfwWindow;
 
 viddef_t	vid;
 
@@ -1095,12 +1105,37 @@ qboolean R_SetMode (void)
 	return true;
 }
 
+qboolean R_GLFWSetup() {
+	if (!glfwInit()) {
+		printf("GLFW failed to initialize.\n");
+		return false;
+	}
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+
+	r_glfwWindow = glfwCreateWindow(800, 600, "GLFW Quake2", NULL, NULL);
+	if (r_glfwWindow == NULL)
+	{
+		printf("Failed to create GLFW window\n");
+		glfwTerminate();
+		return false;
+	}
+	glfwMakeContextCurrent(r_glfwWindow);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		printf("Failed to init GLAD\n");
+		return false;
+	}
+}
+
 /*
 ===============
 R_Init
 ===============
 */
-qboolean R_Init( void *hinstance, void *hWnd )
+qboolean R_Init( void *hinstance, void *wndproc )
 {	
 	char renderer_buffer[1000];
 	char vendor_buffer[1000];
@@ -1119,8 +1154,14 @@ qboolean R_Init( void *hinstance, void *hWnd )
 
 	R_Register();
 
+	// Initialize GLFW, create window and init GL context
+	if (!R_GLFWSetup()) {
+		// TODO: Deinit GLFW
+		return false;
+	}
+
 	// initialize our QGL dynamic bindings
-	if ( !QGL_Init( gl_driver->string ) )
+	if ( !QGL_Init( gl_driver->string, r_glfwWindow ) )
 	{
 		QGL_Shutdown();
         ri.Con_Printf (PRINT_ALL, "ref_gl::R_Init() - could not load \"%s\"\n", gl_driver->string );
@@ -1128,7 +1169,7 @@ qboolean R_Init( void *hinstance, void *hWnd )
 	}
 
 	// initialize OS-specific parts of OpenGL
-	if ( !GLimp_Init( hinstance, hWnd ) )
+	if ( !GLimp_Init( hinstance, wndproc) )
 	{
 		QGL_Shutdown();
 		return false;

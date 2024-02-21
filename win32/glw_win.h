@@ -32,6 +32,7 @@ typedef struct
 	HDC     hDC;			// handle to device context
 	HWND    hWnd;			// handle to window
 	HGLRC   hGLRC;			// handle to GL rendering context
+	GLFWwindow* glfwWindow;
 
 	HINSTANCE hinstOpenGL;	// HINSTANCE for the OpenGL library
 

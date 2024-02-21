@@ -28,9 +28,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #  include <windows.h>
 #endif
 
-#include <GL/gl.h>
+#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
+#include <glfw3.h>
 
-qboolean QGL_Init( const char *dllname );
+qboolean QGL_Init( const char *dllname, GLFWwindow* window );
 void     QGL_Shutdown( void );
 
 #ifndef APIENTRY
