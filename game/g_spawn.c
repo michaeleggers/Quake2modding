@@ -884,7 +884,10 @@ void SP_worldspawn (edict_t *ent)
 	gi.soundindex ("*fall2.wav");	
 	gi.soundindex ("*gurp1.wav");		// drowning damage
 	gi.soundindex ("*gurp2.wav");	
-	gi.soundindex ("*jump1.wav");		// player jump
+
+	//gi.soundindex ("*jump1.wav");		// player jump
+	gi.soundindex("misc/duck-toy-sound.wav"); // Alternative player jump ;)
+
 	gi.soundindex ("*pain25_1.wav");
 	gi.soundindex ("*pain25_2.wav");
 	gi.soundindex ("*pain50_1.wav");

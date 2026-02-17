@@ -35,7 +35,7 @@
 		2048 : "Not in Deathmatch" : 0
 	]
 ]
-
+@baseclass = Angle [ angle(integer) : "Direction" ]
 @baseclass = Targetname [ targetname(target_source) : "Name" ]
 @baseclass = Target [ target(target_destination) : "Target" ]
 
@@ -146,7 +146,7 @@
 
 // 0221 - updated "sounds" information
 // 0221 - added "killtarget"
-@SolidClass base(Appearflags, Targetname, Target) color(0 128 204) = func_door : "Door"
+@SolidClass base(Angle, Appearflags, Targetname, Target) color(0 128 204) = func_door : "Door"
 [
 	spawnflags(Flags) =
 	[
@@ -228,7 +228,7 @@
 // 0221 - added "_minlight" key (even tho you dont want it to stand out)
 // 0221 - added "message" key
 // 0221 - removed "team" key
-@SolidClass base(Appearflags, Targetname) color(0 128 204) = func_door_secret : "Secret Door"
+@SolidClass base(Angle, Appearflags, Targetname) color(0 128 204) = func_door_secret : "Secret Door"
 [
 	spawnflags(Flags) =
 	[
@@ -509,7 +509,7 @@
 ]
 
 // The following three entities are eye-candy - they don't do anything
-@PointClass base(Appearflags) color(255 128 0) size(-32 -32 -16, 32 32 32) model({ "path": ":models/monsters/tank/tris.md2",	"frame":254, "skin": 2}) = misc_eastertank : "Tank sitting down. Make him a chair out of brushes." []
+@PointClass base(Appearflags) color(255 128 0) size(-32 -32 -16, 32 32 32) model({ "path": ":models/monsters/tank/tris.md2",	"frame":254, "skin": 0}) = misc_eastertank : "Tank sitting down. Make him a chair out of brushes." []
 @PointClass base(Appearflags) color(255 128 0) size(-32 -32 0, 32 32 32) model({ "path": ":models/monsters/bitch/tris.md2", "frame":208}) = misc_easterchick : "Chick #1 sitting: Place her near misc_eastertank." []
 @PointClass base(Appearflags) color(255 128 0) size(-32 -32 0, 32 32 32) model({ "path": ":models/monsters/bitch/tris.md2", "frame":248}) = misc_easterchick2 : "Chick #2 sitting w/ different pose. Can be placed close to misc_eastertank's for full effect." []
 
@@ -612,20 +612,18 @@
 @PointClass base(Monsters) model({ "path": ":models/monsters/infantry/tris.md2", "frame": 64}) = monster_infantry : "Infantry" []
 @PointClass base(Monsters) size(-80 -80 0, 90 90 140) model({ "path": ":models/monsters/boss3/jorg/tris.md2" }) = monster_jorg : "Jorg" []
 
-
 // 0221 - this entity can only spawn once the Jorg dies ... im sure someone will change that tho
 @PointClass base(Monsters) size(-32 -32 0, 32 32 80) model({ "path": ":models/monsters/boss3/rider/tris.md2", "frame": 414}) = monster_makron : "Makron" []
 @PointClass base(Monsters) model({ "path": ":models/monsters/medic/tris.md2" }) = monster_medic : "Medic" []
 @PointClass base(Monsters) size(-32 -32 -24, 32 32 32) model({ "path": ":models/monsters/mutant/tris.md2" }) = monster_mutant : "Mutant" []
 @PointClass base(Monsters) model({ "path": ":models/monsters/parasite/tris.md2" }) = monster_parasite : "Parasite" []
 @PointClass base(Monsters) model({ "path": ":models/monsters/soldier/tris.md2", "skin": 0 }) = monster_soldier_light : "Light Soldier" []
+// @PointClass base(Monsters) model({ "path": ":models/monsters/soldieriqm/mrfixit.iqm", "skin": 0 }) = monster_soldier_light : "Light Soldier" []
 @PointClass base(Monsters) model({ "path": ":models/monsters/soldier/tris.md2", "skin": 2 }) = monster_soldier : "Soldier" []
 @PointClass base(Monsters) model({ "path": ":models/monsters/soldier/tris.md2", "skin": 4 }) = monster_soldier_ss : "SS Soldier" []
 @PointClass base(Monsters) size(-32 -32 -16, 32 32 72) model({ "path": ":models/monsters/tank/tris.md2" }) = monster_tank : "Tank" []
 @PointClass base(Monsters) size(-32 -32 -16, 32 32 72) model({ "path": ":models/monsters/tank/tris.md2", "skin": 2 }) = monster_tank_commander : "Tank Commander" []
 @PointClass base(Monsters) size(-64 -64 0, 64 64 72) model({ "path": ":models/monsters/boss1/tris.md2" }) = monster_supertank : "Super Tank Boss" []
-
-@PointClass base(Monsters) model({ "path": ":models/monsters/yohko/tris.md2", "skin": 0, "frame": 0}) = monster_goblin : "Goblin" []
 
 // using a "wait" value of -1 on a path corner causes a func_train to go silent between
 // itself and the next path corner when the train is restarted. The train's sound will
@@ -723,6 +721,11 @@
 [
 	speed(integer) : "Severity of quake" : 200
 	count(integer) : "Duration" : 5
+]
+
+@PointClass base(Appearflags, Targetname) color(255 0 0) size(-8 -8 -8, 8 8 8) = target_script : "Run lua script"
+[
+	delay(integer) : "Delay before script starts"
 ]
 
 @PointClass base(Appearflags, Targetname) color(255 0 0) size(-8 -8 -8, 8 8 8) = target_explosion : "Explosion"

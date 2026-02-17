@@ -745,8 +745,10 @@ void button_use_on_use_button (edict_t* self, edict_t* other, edict_t* activator
 	if (!other->client) return; // Don't bother if this is not the player.
 
 	if (other->client->buttons & BUTTON_USE) {
-		self->activator = other;
-		button_fire(self);
+		// Important to set because activator is being used in G_UseTargets (g_utils.c) in order to print messages, play sound, etc.
+		// If it is NULL, the program will crash!
+		self->activator = other; 
+		button_fire(self);		
 	}
 }
 
@@ -804,7 +806,7 @@ void SP_func_button (edict_t *ent)
 	VectorMA (ent->pos1, dist, ent->movedir, ent->pos2);
 
 	if (ent->spawnflags & 8) {
-		ent->use_on_use_button = button_use_on_use_button;
+		ent->use = button_use_on_use_button;
 	}
 	else {
 		ent->use = button_use;
@@ -818,7 +820,7 @@ void SP_func_button (edict_t *ent)
 		ent->die = button_killed;
 		ent->takedamage = DAMAGE_YES;
 	}
-	else if (!ent->targetname) {
+	else if ( !ent->targetname && !(ent->spawnflags & 8) ) {
 		ent->touch = button_touch;		
 	}
 

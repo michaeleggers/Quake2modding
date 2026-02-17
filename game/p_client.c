@@ -1660,7 +1660,8 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 
 		if (ent->groundentity && !pm.groundentity && (pm.cmd.upmove >= 10) && (pm.waterlevel == 0))
 		{
-			gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
+			//gi.sound(ent, CHAN_VOICE, gi.soundindex("*jump1.wav"), 1, ATTN_NORM, 0);
+			gi.sound(ent, CHAN_VOICE, gi.soundindex("misc/duck-toy-sound.wav"), 1, ATTN_NORM, 0); // NOTE(Michael): Change back before push to repo!
 			PlayerNoise(ent, ent->s.origin, PNOISE_SELF);
 		}
 
@@ -1689,26 +1690,29 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			G_TouchTriggers (ent);
 
 		// DEBUG(Michael): Shoot a ray into the scene to check what objects intersect
-		vec3_t player_pos = { 0 };
-		VectorCopy(ent->s.origin, player_pos);
-		//Com_Printf("Player Pos: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
+		vec3_t cam_pos = { 0 };
+		VectorCopy(ent->s.origin, cam_pos);
+		//Com_Printf("Player Pos: ( %f, %f, %f )\n\n", cam_pos[0], cam_pos[1], cam_pos[2]);
 
 		vec3_t end = { 0.0 };						
 		vec3_t forward, right, up;
 		AngleVectors(client->ps.viewangles, forward, right, up);
-		player_pos[2] += ent->viewheight;
-		VectorMA(player_pos, 50.0, forward, end);
-		//Com_Printf("Player View: ( %f, %f, %f )\n\n", player_pos[0], player_pos[1], player_pos[2]);
+		cam_pos[2] += ent->viewheight;
+		VectorMA(cam_pos, 50.0, forward, end);
+		//Com_Printf("Player View: ( %f, %f, %f )\n\n", cam_pos[0], cam_pos[1], cam_pos[2]);
 		
 		client->showusehud = false;
-		trace_t trace = gi.trace(player_pos, NULL, NULL, end, ent, MASK_SHOT);
+		trace_t trace = gi.trace(cam_pos, NULL, NULL, end, ent, MASK_SHOT);
 		if (trace.ent) {
-			if (trace.ent->targetname) {
-				//Com_Printf("Hit Entity: %s\n", trace.ent->targetname);
-				if (trace.ent->use_on_use_button) {
-					trace.ent->use_on_use_button(trace.ent, ent, ent);
+			//if (trace.ent->targetname) {
+			if (trace.ent->spawnflags & 8 /*!Q_stricmp("func_button", trace.ent->classname)*/ ) {
+				
+				//Com_Printf("Hit Entity: %s\n", trace.ent->classname);
+				if (trace.ent->use) {
+					trace.ent->use(trace.ent, ent, ent);
 					client->showusehud = true;
-				}			
+				}
+				//}
 			}
 		}
 
