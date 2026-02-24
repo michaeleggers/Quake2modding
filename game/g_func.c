@@ -734,21 +734,26 @@ void button_fire (edict_t *self)
 	Move_Calc (self, self->moveinfo.end_origin, button_wait);
 }
 
-void button_use (edict_t *self, edict_t *other, edict_t *activator)
-{	
+void button_use(edict_t* self, edict_t* other, edict_t* activator)
+{
 	self->activator = activator;
-	button_fire (self);
+	button_fire(self);
 }
 
 void button_use_on_use_button (edict_t* self, edict_t* other, edict_t* activator)
 {
-	if (!other->client) return; // Don't bother if this is not the player.
+	if (activator != other) { // The activator is not info_player_start (human player).
+		button_use(self, other, activator);
+	}
+	else {
+		if (!other->client) return; // Don't bother if this is not the player.
 
-	if (other->client->buttons & BUTTON_USE) {
-		// Important to set because activator is being used in G_UseTargets (g_utils.c) in order to print messages, play sound, etc.
-		// If it is NULL, the program will crash!
-		self->activator = other; 
-		button_fire(self);		
+		if (other->client->buttons & BUTTON_USE) {
+			// Important to set because activator is being used in G_UseTargets (g_utils.c) in order to print messages, play sound, etc.
+			// If it is NULL, the program will crash!
+			self->activator = other; 
+			button_fire(self);		
+		}
 	}
 }
 
